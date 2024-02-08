@@ -1,7 +1,10 @@
 ## Project Description 
-Our proposed application is a productivity tool designed to cater to individuals who have multiple tasks to do and seek a seamless integration of daily activities with personal entertainment preferences. Our target audience is students, young professionals, and anyone who wants a personalized experience that enhances their productivity. These individuals are all people who seek a solution that helps them with managing their tasks effectively while also having elements that support their personal interests such as music and aesthetics.  
+Our proposed application is a productivity tool designed to cater to individuals who have multiple tasks to do and seek a seamless integration of daily activities with personal entertainment preferences. Our target audience is students, young professionals, and anyone who wants a personalized experience that enhances their productivity. These individuals are all people who seek a solution that helps them with managing their tasks effectively while also having elements that support their personal interests such as music and aesthetics.
+
 We envision that the primary motivation these users will have to use our application is their desire to build an efficient daily routine. With features like task management, a pomodoro timer for focused work sessions, and direct integration with Spotify for music playback, our application aims to fulfill any and all our users' needs.
-Our motivation for creating such an application comes from our observation that while there are numerous tools that do all of these things individually, there are very few, if any, applications that offer a unified platform. Currently, users have to switch between multiple different applications and this can disrupt focus and reduce efficiency. 
+
+Our motivation for creating such an application comes from our observation that while there are numerous tools that do all of these things individually, there are very few, if any, applications that offer a unified platform. Currently, users have to switch between multiple different applications and this can disrupt focus and reduce efficiency.
+
 As developers, who are students ourselves, we understand the need that our target audience has when it comes to managing their busy schedules and meeting deadlines effectively. Therefore, our motivation for creating this application stems from the fact that we believe we can design and build an application that not only meets these diverse needs but also exceeds expectations by offering a level of integration and personalization not currently available in the market. We plan to leverage our personal experiences and understanding of the challenges our users might face to create a central hub for productivity and enjoyment that is not just a tool but a companion for our users in their pursuit of productivity and personal fulfillment. 
 
 ## Technical Description
@@ -51,4 +54,4 @@ Include any database schemas as an appendix
 - Shared tasks, users shared with
 
 ## UI Design: 
-https://www.figma.com/file/W9dwlnPnFAYbcT6JAsLNe7/Wireframing-and-prototyping?type=design&node-id=38%3A4&mode=design&t=6So2WMB5oWXSLyg5-1
+[Link to Wireframe](https://www.figma.com/file/W9dwlnPnFAYbcT6JAsLNe7/Wireframing-and-prototyping?type=design&node-id=38%3A4&mode=design&t=6So2WMB5oWXSLyg5-1)
