@@ -9,8 +9,8 @@ function App() {
     <div>
       <Routes>
         <Route path='/' element={<LogIn />} />
-        <Route path="/home" element={<PomodoroTimer />} />
-        <Route path="/tasks" element={<Home />} />
+        <Route path="home" element={<PomodoroTimer />} />
+        <Route path="tasks" element={<Home />} />
       </Routes>
     </div>
   );

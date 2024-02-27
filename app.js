@@ -84,7 +84,7 @@ app.get(
 	(req, res, next) => {
         console.log("reached signin");
 		return req.authContext.login({
-			postLoginRedirectUri: "/", // redirect here after login
+			postLoginRedirectUri: "/home", // redirect here after login
 		})(req, res, next);
 	}
 );
@@ -100,7 +100,7 @@ app.get(
 
 // All other GET requests not handled before will return our React app
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../public/build', 'index.html/home'));
+    res.sendFile(path.resolve(__dirname, '../public/build', 'index.html/'));
   });
 
 

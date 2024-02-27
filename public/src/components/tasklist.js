@@ -10,7 +10,7 @@ export function Tasklist(props) {
       // Function to fetch tasks from the API
       const fetchTasks = async () => {
         try {
-          const response = await fetch(`/api/v1/tasks/`);
+          const response = await fetch(`localhost:3001/api/v1/tasks/`);
           
           const data = await response.json();
           
@@ -24,11 +24,15 @@ export function Tasklist(props) {
 
       const handleAddTask = async () => {
         try {
+          console.log(newTask);
           // Perform the POST request to add a new task
           console.log("before adding task fetch");
-          await fetch('/api/v1/tasks/', {
+          await fetch('localhost:3001/api/v1/tasks/', {
             method: 'POST',
-            body: { task: newTask },
+            headers : {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({task:newTask}),
           });
           console.log("after adding task fetch");
         
