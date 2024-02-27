@@ -112,3 +112,11 @@ margin-bottom: 10px;
 .task-list label {
 margin-left: 5px;
 }
+
+input {
+  color: #000000;
+}
+
+button {
+  color: #000000;
+}
