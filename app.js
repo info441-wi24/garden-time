@@ -3,6 +3,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import sessions from 'express-session'
+import cors from 'cors';
 
 import models from './models.js';
 import dotenv from 'dotenv';
@@ -12,12 +13,19 @@ import WebAppAuthProvider from 'msal-node-wrapper'
 
 const authConfig = {
     auth: {
+        clientId: "694c3e20-5c5c-4aba-82ea-70df9da00fb0",
+        authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
+        clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
+        redirectUri: "/redirect"
+        // redirectUri: "https://a5-rsrika-websharer.azurewebsites.net/redirect", //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+    },
+    // auth: {
         
-        clientId: `${process.env.CLIENT_ID}`,
-        authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
-        clientSecret: `${process.env.CLIENT_SECRET}`,
-        redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
-    },    
+    //     clientId: `${process.env.CLIENT_ID}`,
+    //     authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
+    //     clientSecret: `${process.env.CLIENT_SECRET}`,
+    //     redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+    // },    
     system: {
         loggerOptions: {
             loggerCallback(loglevel, message, containsPii) {
@@ -42,10 +50,11 @@ const __dirname = dirname(__filename);
 var app = express();
 
 app.use(logger('dev'));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, './front-end/build')));
+app.use(express.static(path.join(__dirname, './public/build')));
 
 const oneDay = 1000 * 60 * 60 * 24
 app.use(sessions({

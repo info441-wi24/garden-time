@@ -6,10 +6,7 @@ export function LogIn(props) {
 
     const handleLogIn = async () => {
         try {
-            const response = await fetch('/signin', {
-                method: 'GET',
-                credentials: 'include'
-            });
+            const response = await fetch('/signin');
           
             if (response.ok) {
                 console.log('Login successful');
