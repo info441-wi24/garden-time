@@ -1,17 +1,17 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { useNavigate } from 'react-router';
 import "./css/style.css";
+import Home from './pages/homepage.js'
 
 function App() {
   return (
     <div className="App">
       <Routes>
       
-        <Route path="/journey" element={
+        <Route path="/" element={
           <>
             {/* put components here */
-              <Image/>
+              <Home/>
             }
           </>
         } />

@@ -12,10 +12,14 @@ import WebAppAuthProvider from 'msal-node-wrapper'
 
 const authConfig = {
     auth: {
-        clientId: `${process.env.CLIENT_ID}`,
-        authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
-        clientSecret: `${process.env.CLIENT_SECRET}`,
-        redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+        clientId: "694c3e20-5c5c-4aba-82ea-70df9da00fb0",
+        authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
+        clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
+        redirectUri: "/redirect"
+        // clientId: `${process.env.CLIENT_ID}`,
+        // authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
+        // clientSecret: `${process.env.CLIENT_SECRET}`,
+        // redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
     },    
     system: {
         loggerOptions: {
@@ -32,6 +36,8 @@ const authConfig = {
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import apiV1Router from './routes/api/v1/apiv1.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -60,7 +66,12 @@ app.use((req, res, next) => {
     next();
 })
 
+app.use((req, res, next) => {
+    req.models = models;
+    next();
+});
 
+app.use('/api/v1', apiV1Router);
 
 app.get(
 	'/signin',
@@ -81,9 +92,6 @@ app.get(
 );
 
 
-app.use((req, res, next) => {
-    req.models = models;
-    next();
-});
+
 
 export default app;

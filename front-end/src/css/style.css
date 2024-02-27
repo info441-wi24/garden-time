@@ -1,0 +1,41 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+html {
+    width: 100%;
+    margin: 0;
+}
+
+body {
+  height: 100%;
+}
+.Homepage {
+    background-color: #E0EFE1;
+    height: 100%;
+}
+.taskbar-container {
+    margin: 20px;
+}
+
+.card {
+background-color: #ffffff;
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+padding: 20px;
+max-width: 500px;
+min-height: 700px;
+}
+  
+.task-list {
+list-style: none;
+padding: 0;
+}
+  
+.task-list li {
+margin-bottom: 10px;
+}
+  
+.task-list label {
+margin-left: 5px;
+}
