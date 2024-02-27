@@ -12,14 +12,11 @@ import WebAppAuthProvider from 'msal-node-wrapper'
 
 const authConfig = {
     auth: {
-        clientId: "694c3e20-5c5c-4aba-82ea-70df9da00fb0",
-        authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
-        clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
-        redirectUri: "/redirect"
-        // clientId: `${process.env.CLIENT_ID}`,
-        // authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
-        // clientSecret: `${process.env.CLIENT_SECRET}`,
-        // redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+        
+        clientId: `${process.env.CLIENT_ID}`,
+        authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
+        clientSecret: `${process.env.CLIENT_SECRET}`,
+        redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
     },    
     system: {
         loggerOptions: {

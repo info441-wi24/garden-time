@@ -7,8 +7,8 @@ let models = {}
 console.log("connecting to mongodb")
 
 //TODO: add your mongoDB connection string below, with database names userDemo
-// mongoose.connect(`mongodb+srv://lwang27:${process.env.MONGODB_PWD}@cluster0.3rbb6cq.mongodb.net/garden_time`);
-await mongoose.connect("mongodb+srv://newUser:iLoveBoba@info441a3roshni.j7onkcu.mongodb.net/garden_time");
+mongoose.connect(`mongodb+srv://lwang27:${process.env.MONGODB_PWD}@cluster0.3rbb6cq.mongodb.net/garden_time`);
+
 console.log("successfully connected to mongodb")
 
 // Add schemas and models for my database
