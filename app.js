@@ -1,42 +1,89 @@
-import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import sessions from 'express-session'
 
-import WebAppAuthProvider from 'msal-node-wrapper';
+import models from './models.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
+import WebAppAuthProvider from 'msal-node-wrapper'
+
+const authConfig = {
+    auth: {
+        clientId: `${process.env.CLIENT_ID}`,
+        authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
+        clientSecret: `${process.env.CLIENT_SECRET}`,
+        redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+    },    
+    system: {
+        loggerOptions: {
+            loggerCallback(loglevel, message, containsPii) {
+                console.log(message);
+            },
+            piiLoggingEnabled: false,
+            logLevel: 3,
+        }
+    }
+};
+
+//import api router
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, './public/build')));
+app.use(express.static(path.join(__dirname, './front-end/build')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+const oneDay = 1000 * 60 * 60 * 24
+app.use(sessions({
+    secret: "this is some secret key I am making up v45v;lkjgdsal;nwqt49asglkn",
+    saveUninitialized: true,
+    cookie: {maxAge: oneDay},
+    resave: false
+}))
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+const authProvider = await WebAppAuthProvider.WebAppAuthProvider.initialize(authConfig);
+app.use(authProvider.authenticate());
+
+app.use((req, res, next) => {
+    console.log("session info:", req.session)
+    next();
+})
+
+
+
+app.get(
+	'/signin',
+	(req, res, next) => {
+		return req.authContext.login({
+			postLoginRedirectUri: "/", // redirect here after login
+		})(req, res, next);
+	}
+);
+
+app.get(
+	'/signout',
+	(req, res, next) => {
+		return req.authContext.logout({
+			postLogoutRedirectUri: "/", // redirect here after logout
+		})(req, res, next);
+	}
+);
+
+
+app.use((req, res, next) => {
+    req.models = models;
+    next();
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
+export default app;
