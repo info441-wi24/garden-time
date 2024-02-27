@@ -6,13 +6,10 @@ export function LogIn(props) {
 
     const handleLogIn = async () => {
         try {
-            const response = await fetch('/signin');
-          
-            if (response.ok) {
-                console.log('Login successful');
-            } else {
-                console.error('Login failed:', response.statusText);
-            }
+            console.log("trying to navigate to signin")
+            navigate('/signin');
+            window.location.reload();
+            console.log("finished signin");
         } catch (error) {
             console.error('Error logging in:', error);
         }
