@@ -27,7 +27,7 @@ export function Tasklist(props) {
           console.log(newTask);
           // Perform the POST request to add a new task
           console.log("before adding task fetch");
-          await fetch('localhost:3001/api/v1/tasks/', {
+          await fetch('/api/v1/tasks/', {
             method: 'POST',
             headers : {
               'Content-Type': 'application/json'

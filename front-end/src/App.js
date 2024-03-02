@@ -1,24 +1,20 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import "./css/style.css";
-import Home from './pages/homepage.js'
+import {Routes, Route} from 'react-router-dom';
+import PomodoroTimer from './components/PomodoroTimer.js';
+import LogIn from './components/LogIn.js';
+import Home from './pages/homepage.js';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <Routes>
-      
-        <Route path="/" element={
-          <>
-            {/* put components here */
-              <Home/>
-            }
-          </>
-        } />
-
+        <Route path='/' element={<LogIn />} />
+        <Route path="home" element={<PomodoroTimer />} />
+        <Route path="tasks" element={<Home />} />
       </Routes>
     </div>
   );
 }
+
 
 export default App;

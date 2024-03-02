@@ -54,7 +54,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, './public/build')));
+app.use(express.static(path.join(__dirname, './front-end/build')));
 
 const oneDay = 1000 * 60 * 60 * 24
 app.use(sessions({
@@ -84,7 +84,7 @@ app.get(
 	(req, res, next) => {
         console.log("reached signin");
 		return req.authContext.login({
-			postLoginRedirectUri: "/home", // redirect here after login
+			postLoginRedirectUri: "/#/home", // redirect here after login
 		})(req, res, next);
 	}
 );
