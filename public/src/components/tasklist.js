@@ -10,7 +10,7 @@ export function Tasklist(props) {
       // Function to fetch tasks from the API
       const fetchTasks = async () => {
         try {
-          const response = await fetch(`localhost:3001/api/v1/tasks/`);
+          const response = await fetch(`/api/v1/tasks/`);
           
           const data = await response.json();
           
