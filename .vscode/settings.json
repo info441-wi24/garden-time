@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/76d376e1-35b4-4ca1-b8cb-fa05b5c7fbcd/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/garden-time",
+    "appService.deploySubpath": "."
+}
