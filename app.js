@@ -17,7 +17,6 @@ const authConfig = {
         authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
         clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
         redirectUri: "/redirect"
-        // redirectUri: "https://a5-rsrika-websharer.azurewebsites.net/redirect", //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
     },
     // auth: {
         
@@ -93,7 +92,7 @@ app.get(
 	'/signout',
 	(req, res, next) => {
 		return req.authContext.logout({
-			postLogoutRedirectUri: "/", // redirect here after logout
+			postLogoutRedirectUri: "/#/home", // redirect here after logout
 		})(req, res, next);
 	}
 );

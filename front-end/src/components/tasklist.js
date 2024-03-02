@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavBar } from './navbar';
 
 export function Tasklist(props) {
+    
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [newTask, setNewTask] = useState('');
@@ -37,10 +38,29 @@ export function Tasklist(props) {
           console.log("after adding task fetch");
         
           setNewTask('');
-          fetchTasks();
+          await fetchTasks();
         } catch (error) {
           console.error(error);
         }
+      };
+
+      const handleCheckboxClick = async (taskId) => {
+        try {
+          console.log("calling delete")
+          // Make a DELETE request to your server using fetch
+          const response = await fetch('api/v1/tasks/', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id:taskId}),
+          });  
+          console.log('task deleted');
+          await fetchTasks()
+        } catch (error) {
+          console.error('Error deleting item:', error);
+        }
+
       };
 
     
@@ -66,14 +86,19 @@ export function Tasklist(props) {
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
-                    <ul className="task-list">
-                    {tasks.map((task, index) => (
-                        <li key={index}>
-                        <input type="checkbox" id={`task-${index}`} />
-                        <label htmlFor={`task-${index}`}>{task}</label>
-                        </li>
-                    ))}
-                    </ul>
+                    tasks.length != 0 ? (
+                      <ul className="task-list">
+                      {tasks.map((task, index) => (
+                          <li key={index}>
+                            <input type="checkbox" id={`task-${index}`} onClick={() => {handleCheckboxClick(task.taskId)}}/>
+                            <label htmlFor={`task-${index}`}>{task.description}</label>
+                          </li>
+                      ))}
+                      </ul>
+                    ) :
+
+                    <p>You do not have any tasks!</p>
+                    
                 )}
                 </div>
             </div>

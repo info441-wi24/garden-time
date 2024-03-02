@@ -15,7 +15,7 @@ router.get('/', async (req, res) =>{
                 usernameTasks.map(async task => { 
                     try{
                         console.log("TASK", task)
-                        return task.description
+                        return {"description": task.description, "taskId":task._id}
                     }catch(error){
                         // TODO: return error message
                         console.log("Error getting post from db", error)
@@ -60,6 +60,32 @@ router.post('/', async (req, res) => {
         }
     
     
+    
+})
+
+router.delete('/', async (req, res) => {
+    if(req.session.isAuthenticated){
+        try{
+            console.log("DELETE REQUEST", req.body.id);
+            console.log("USERNAME", req.session.account.username);
+            let taskId = req.body.id; 
+            
+            // Delete the task referred to with the given postID 
+            await req.models.Task.deleteOne({_id: taskId})
+            // Return the json: {"status": "success"}
+            res.json({"status":"success"})
+    
+        }catch(error){
+            console.log("Error adding like to the post", error)
+            res.send(500).json({"status": "error", "error": error})
+        }
+    }
+    else {
+        res.send(401).json({
+            status: "error",
+            error: "not logged in"
+         })
+    }
     
 })
 export default router;
