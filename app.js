@@ -100,7 +100,7 @@ app.get(
 
 // All other GET requests not handled before will return our React app
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../public/build', 'index.html/'));
+    res.sendFile(path.resolve(__dirname, '../front-end/build', 'index.html/'));
   });
 
 
