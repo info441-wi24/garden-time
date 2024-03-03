@@ -6,6 +6,7 @@ export function Tasklist(props) {
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [newTask, setNewTask] = useState('');
+    const [currentTag, setCurrentTag] = useState('not started');
 
 
       // Function to fetch tasks from the API
@@ -80,18 +81,34 @@ export function Tasklist(props) {
                     onChange={(e) => setNewTask(e.target.value)}
                     placeholder="Enter task..."
                   />
+                  <select
+                      value={taskStatus}
+                      onChange={(e) => setTaskStatus(e.target.value)}
+                  >
+                      <option value="not started">Not Started</option>
+                      <option value="in progress">In Progress</option>
+                      <option value="completed">Completed</option>
+                  </select>
                   <button onClick={handleAddTask}>Add Task</button>
                   <button onClick={fetchTasks}>See My Tasks</button>
                 </div>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
-                    tasks.length != 0 ? (
+                    tasks.length !== 0 ? (
                       <ul className="task-list">
                       {tasks.map((task, index) => (
                           <li key={index}>
                             <input type="checkbox" id={`task-${index}`} onClick={() => {handleCheckboxClick(task.taskId)}}/>
                             <label htmlFor={`task-${index}`}>{task.description}</label>
+                            <select>
+                              {/* Map over tags and render options */}
+                              {task.tags.map((tag, tagIndex) => (
+                                  <option key={tagIndex} value={tag}>
+                                      {tag}
+                                  </option>
+                              ))}
+                          </select>
                           </li>
                       ))}
                       </ul>

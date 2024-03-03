@@ -26,7 +26,7 @@ router.get('/', async (req, res) =>{
             res.send(taskData)
         }
         else {
-            res.send(["No tasks yet!, please log in"])
+            res.send([{"description": "No tasks yet!, please log in", "taskId": 0}])
         }
         
         
