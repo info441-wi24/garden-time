@@ -16,10 +16,10 @@ console.log("successfully connected to mongodb")
 // Add schemas and models for my database
 const userSchema = new mongoose.Schema({
     username: String,
-    firstname: String,
-    lastname: String,
+    name: String,
     ThemePreference: String,
-    created_date: Date
+    created_date: Date, 
+    created_tags: [String]
 })
 
 models.User = mongoose.model('User', userSchema);
@@ -27,7 +27,8 @@ models.User = mongoose.model('User', userSchema);
 const taskSchema = new mongoose.Schema({
     description: String,
     user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-    created_date: Date
+    created_date: Date, 
+    tag: String
 })
 
 models.Task = mongoose.model("Task", taskSchema);

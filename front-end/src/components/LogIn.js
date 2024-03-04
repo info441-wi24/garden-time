@@ -11,6 +11,13 @@ export function LogIn(props) {
             window.location.href = '/signin';
             // window.location.reload();
             console.log("finished signin");
+            let response = await fetch('/api/v1/users/', {
+                method: 'POST',
+                headers : {
+                  'Content-Type': 'application/json'
+                },
+              });
+            console.log("finished fetch");
         } catch (error) {
             console.error('Error logging in:', error);
         }

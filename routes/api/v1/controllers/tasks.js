@@ -15,7 +15,7 @@ router.get('/', async (req, res) =>{
                 usernameTasks.map(async task => { 
                     try{
                         console.log("TASK", task)
-                        return {"description": task.description, "taskId":task._id}
+                        return {"description": task.description, "taskId":task._id, "tag": task.tag}
                     }catch(error){
                         // TODO: return error message
                         console.log("Error getting post from db", error)
@@ -46,7 +46,8 @@ router.post('/', async (req, res) => {
             const newTask = new req.models.Task({
                 description: req.body.task,
                 created_date: new Date(),
-                username: req.session.account.username
+                username: req.session.account.username,
+                tag: req.body.tag
             })
             console.log("NEW Task:"  , newTask);
     
@@ -57,11 +58,25 @@ router.post('/', async (req, res) => {
         }catch(error){
             console.log("Error saving post to db", error)
             res.send(500).json({"status": "error", "error": error})
-        }
-    
-    
-    
+        }    
 })
+
+router.post('/tag', async (req, res) => {
+    console.log("IN POST");
+         try{
+         
+            let usernameVar = req.query.username;
+            let userValues= await req.models.User.findById(req.body.id)
+        
+            userValues.tag = req.body.tag
+
+            await userValues.save()
+     
+         }catch(error){
+             console.log("Error saving post to db", error)
+             res.send(500).json({"status": "error", "error": error})
+         }    
+ })
 
 router.delete('/', async (req, res) => {
     if(req.session.isAuthenticated){

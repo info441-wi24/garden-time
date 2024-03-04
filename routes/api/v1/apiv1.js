@@ -3,6 +3,7 @@ import express from 'express';
 
 
 import tasksRouter from './controllers/tasks.js';
+import usersRouter from './controllers/users.js'
 
 
 var router = express.Router();
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/tasks', tasksRouter);
+router.use('/users', usersRouter);
 
 export default router;
 
