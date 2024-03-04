@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
 
@@ -8,9 +8,9 @@ export function NavBar(props) {
         <div>
             <Navbar variant="null" className="nav-bar">
                 <Nav>
-                    <NavLink className="nav-item" to="/">LogIn</NavLink>
                     <NavLink className="nav-item" to="/home">Home</NavLink>
                     <NavLink className="nav-item" to="/tasks">Tasks</NavLink>
+                    <NavLink className="nav-item" to="/">LogIn</NavLink>
                  </Nav>
             </Navbar>
         </div >

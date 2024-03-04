@@ -1,6 +1,6 @@
 import React from 'react';
 import {Routes, Route} from 'react-router-dom';
-import PomodoroTimer from './components/PomodoroTimer.js';
+import Task from './pages/taskpage.js';
 import LogIn from './components/LogIn.js';
 import Home from './pages/homepage.js';
 
@@ -9,8 +9,8 @@ function App() {
     <div>
       <Routes>
         <Route path='/' element={<LogIn />} />
-        <Route path="home" element={<PomodoroTimer />} />
-        <Route path="tasks" element={<Home />} />
+        <Route path="home" element={<Home />} />
+        <Route path="tasks" element={<Task />} />
       </Routes>
     </div>
   );
