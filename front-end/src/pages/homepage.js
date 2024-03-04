@@ -1,5 +1,5 @@
 import React from 'react'
-import Tasklist from '../components/tasklist.js'
+import PomodoroTimer from '../components/PomodoroTimer.js';
 
 
 
@@ -10,7 +10,7 @@ export function Home(props) {
     
     return (
         <div className="Homepage">
-            <Tasklist/>
+            <PomodoroTimer/>
         </div>
     ); 
 

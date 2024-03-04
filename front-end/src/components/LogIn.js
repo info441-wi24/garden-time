@@ -6,7 +6,7 @@ export function LogIn(props) {
 
     const handleLogIn = async () => {
         try {
-            console.log("trying to navigate to signin")
+            console.log("trying to navigate to signin");
             // navigate('/signin');
             window.location.href = '/signin';
             // window.location.reload();
@@ -22,7 +22,7 @@ export function LogIn(props) {
     
     return (
         <div className='intro'>
-            <h1>NUTURE YOUR PRODUCTIVITY WITH GARDEN TIME</h1>
+            <h1>NURTURE YOUR PRODUCTIVITY WITH GARDEN TIME</h1>
             <div className='login'>
                 <button className='ms' onClick={handleLogIn}>Login with Microsoft</button>
                 <p>OR</p>
