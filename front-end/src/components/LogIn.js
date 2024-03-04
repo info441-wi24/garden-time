@@ -10,19 +10,15 @@ export function LogIn(props) {
             // navigate('/signin');
             window.location.href = '/signin';
             // window.location.reload();
+            
             console.log("finished signin");
-            let response = await fetch('/api/v1/users/', {
-                method: 'POST',
-                headers : {
-                  'Content-Type': 'application/json'
-                },
-              });
-            console.log("finished fetch");
+            
         } catch (error) {
             console.error('Error logging in:', error);
         }
     };
 
+   
     const handleContinueWithoutAccount = () => {
         navigate('home');
     };
@@ -31,7 +27,9 @@ export function LogIn(props) {
         <div className='intro'>
             <h1>NURTURE YOUR PRODUCTIVITY WITH GARDEN TIME</h1>
             <div className='login'>
-                <button className='ms' onClick={handleLogIn}>Login with Microsoft</button>
+                <button className='ms' onClick={async () => {
+                    await handleLogIn()
+                    }}>Login with Microsoft</button>
                 <p>OR</p>
                 <button className='ms' onClick={handleContinueWithoutAccount}>Continue Without Account</button>
             </div>

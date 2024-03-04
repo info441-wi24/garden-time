@@ -8,11 +8,25 @@ export async function Tasklist(props) {
     const [newTask, setNewTask] = useState('');
     const [currentTag, setCurrentTag] = useState('not-started'); // Initialize with default value
     const [customTag, setCustomTag] = useState('');
-    
+    const [tagsList, setTagsList] = useState([]);
 
-    const tagResponse = await fetch(`/api/v1/users/tag`)
-    const tagList = await tagResponse.json(); 
-    console.log("TagList", tagList)
+
+    window.onload(() => {
+      fetchTags();
+      fetchTasks();
+    })
+
+    const fetchTags = async() => {
+      try {
+        const tagResponse = await fetch(`/api/v1/users/tag`)
+        const tagList = await tagResponse.json(); 
+        setTagsList(tagList);
+      }
+      catch (error) {
+        console.error(error);
+        setTagsList(["Not Started", "In Progress", "Completed"]);
+      }
+    }
 
       // Function to fetch tasks from the API
       const fetchTasks = async () => {
@@ -28,6 +42,8 @@ export async function Tasklist(props) {
           setIsLoading(false);
         }
       };
+
+
 
       const handleAddTask = async () => {
         try {
@@ -122,7 +138,7 @@ export async function Tasklist(props) {
                     }}
                     className='text-dark'
                   >      
-                    {tagList.map((tag, tagIndex) => (
+                    {tagsList.map((tag, tagIndex) => (
                         <option key={tagIndex} value={tag}>
                             {tag}
                         </option>
@@ -155,7 +171,7 @@ export async function Tasklist(props) {
                                 editTaskTag(task.taskId, e)
                               }} className='text-dark'>
                               {/* Map over tags and render options */}
-                              {tagList.map((tag, tagIndex) => (
+                              {tagsList.map((tag, tagIndex) => (
                                   <option key={tagIndex} value={tag}>
                                       {tag}
                                   </option>

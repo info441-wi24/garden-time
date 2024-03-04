@@ -83,7 +83,8 @@ app.get(
 	(req, res, next) => {
         console.log("reached signin");
 		return req.authContext.login({
-			postLoginRedirectUri: "/#/home", // redirect here after login
+			postLoginRedirectUri: "/postlogin"
+            //postLoginRedirectUri: "/#/home", // redirect here after login
 		})(req, res, next);
 	}
 );
@@ -92,10 +93,36 @@ app.get(
 	'/signout',
 	(req, res, next) => {
 		return req.authContext.logout({
+            //postLogoutRedirectUri: "/postlogin"
 			postLogoutRedirectUri: "/#/home", // redirect here after logout
 		})(req, res, next);
 	}
 );
+
+app.get('/postlogin', async (req, res) => {
+    console.log("reached the api router for users");
+    try{
+        
+        const newUser = new req.models.User({
+            username: req.session.account.username,
+            name: req.session.account.name, 
+            ThemePreference: "", 
+            created_date: new Date(),
+            created_tags: ["Not Started", "In Progress", "Completed"]
+        })
+        console.log("NEW user:"  , newUser);
+
+        await newUser.save()
+
+        res.redirect("/#/home")
+        
+        
+
+    }catch(error){
+        console.log("Error getting tags from db", error)
+        res.send(500).json({"status": "error", "error": error})
+    }
+})
 
 // All other GET requests not handled before will return our React app
 app.get('/', (req, res) => {
