@@ -41,9 +41,22 @@ export function PomodoroTimer(props) {
       <header>
         <NavBar />
       </header>
-      <div className="timer">{`${Math.floor(time / 60)}:${time % 60 < 10 ? `0${time % 60}` : time % 60}`}</div>
-      <button className="start" onClick={handleActivation}>{status}</button>
-      <button className="reset" onClick={handleReset}>Reset</button>
+      <div className="container">
+        <div className="above-timer">
+          <button className="pomodoro">Pomodoro</button>
+          <button className="break-time">Break Time</button>
+          <button className="tag">Tag</button>
+        </div>
+        <div className="timer-container">
+          <div className="timer-text">
+            {`${Math.floor(time / 60)}:${time % 60 < 10 ? `0${time % 60}` : time % 60}`}
+          </div>
+        </div>
+        <div className="below-timer">
+          <button className="start" onClick={handleActivation}>{status}</button>
+          <button className="reset" onClick={handleReset}>Reset</button>
+        </div>
+      </div>
     </div>
   );
 };
