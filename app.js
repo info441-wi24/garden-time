@@ -103,18 +103,27 @@ app.get('/postlogin', async (req, res) => {
     console.log("reached the api router for users");
     try{
         
-        const newUser = new req.models.User({
-            username: req.session.account.username,
-            name: req.session.account.name, 
-            ThemePreference: "", 
-            created_date: new Date(),
-            created_tags: ["Not Started", "In Progress", "Completed"]
-        })
-        console.log("NEW user:"  , newUser);
+        const existingUser = await req.models.User.findOne({ username: req.session.account.username });
 
-        await newUser.save()
-
-        res.redirect("/#/home")
+        if (existingUser) {
+            res.redirect("/#/home");
+            return;
+        }
+        else {
+            const newUser = new req.models.User({
+                username: req.session.account.username,
+                name: req.session.account.name, 
+                ThemePreference: "", 
+                created_date: new Date(),
+                created_tags: ["Not Started", "In Progress", "Completed"]
+            })
+            console.log("NEW user:"  , newUser);
+    
+            await newUser.save()
+    
+            res.redirect("/#/home")
+        }
+        
         
         
 

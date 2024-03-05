@@ -53,8 +53,8 @@ router.get('/tag', async (req, res) =>{
         
         if(req.session.account.username !== undefined) {
             
-            let usernameVar = req.query.username;
-            let usernameValues= await req.models.User.find({user: usernameVar})
+            let usernameVar = req.session.account.username
+            let usernameValues= await req.models.User.find({username: usernameVar})
         
             res.send(usernameValues[0].created_tags)
         }
@@ -76,15 +76,19 @@ router.post('/tag', async (req, res) =>{
         
         if(req.session.account.username !== undefined) {
             
-            let usernameVar = req.query.username;
-            let userValues= await req.models.User.find({user: usernameVar})
+            let usernameVar = req.session.account.username
+            let userValues= await req.models.User.findOne({username: usernameVar})
+            
+            console.log("USER VALUES", userValues);
         
             if(!userValues.created_tags.includes(req.body.tag)){
                 //unshift adds to the front of the array instead of at the end so the new tags are always first 
                 userValues.created_tags.unshift(req.body.tag)
             }
+            console.log(userValues.created_tags)
 
             await userValues.save()
+            res.json({"status":"success"})
         }
         else {
             console.log("Error getting tags from db", error)
