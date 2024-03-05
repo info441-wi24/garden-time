@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { NavBar } from './navbar';
 
-export async function Tasklist(props) {
+export function Tasklist(props) {
     
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [newTask, setNewTask] = useState('');
     const [currentTag, setCurrentTag] = useState('not-started'); // Initialize with default value
     const [customTag, setCustomTag] = useState('');
-    
+    const [tagsList, setTagsList] = useState([]);
 
-    const tagResponse = await fetch(`/api/v1/users/tag`)
-    const tagList = await tagResponse.json(); 
-    console.log("TagList", tagList)
+
+    
+    const fetchTags = async() => {
+      try {
+        const tagResponse = await fetch(`/api/v1/users/tag`)
+        const tagList = await tagResponse.json(); 
+        setTagsList(tagList);
+      }
+      catch (error) {
+        console.error(error);
+        setTagsList(["Not Started", "In Progress", "Completed"]);
+      }
+    }
 
       // Function to fetch tasks from the API
       const fetchTasks = async () => {
@@ -23,16 +33,21 @@ export async function Tasklist(props) {
           
           setTasks(data);
           setIsLoading(false);
+          console.log("fetching tags");
+          await fetchTags();
         } catch (error) {
           console.error(error);
           setIsLoading(false);
         }
       };
 
+
+
       const handleAddTask = async () => {
         try {
         
           // Perform the POST request to add a new task
+          console.log("before post to tasks")
           await fetch('/api/v1/tasks/', {
             method: 'POST',
             headers : {
@@ -40,6 +55,7 @@ export async function Tasklist(props) {
             },
             body: JSON.stringify({task:newTask, tag: currentTag}),
           });
+          console.log("after post to tasks, before post to users/tag")
           
           // add the new tag to all of the user tags if needed 
           await fetch('/api/v1/users/tag', {
@@ -49,6 +65,7 @@ export async function Tasklist(props) {
             },
             body: JSON.stringify({tag: currentTag}),
           });
+          console.log("after post to users/tag")
         
           setNewTask('');
           await fetchTasks();
@@ -98,6 +115,39 @@ export async function Tasklist(props) {
         
       }
 
+      let tagOptions = () => {
+        fetchTags();
+        console.log("Fetching tags", tagsList);
+        return (
+          <span>
+            <select value={currentTag}
+              onChange={(e) => {
+                setCurrentTag(e.target.value);
+                setCustomTag('');
+              }}
+              className='text-dark'
+            >      
+              {tagsList.map((tag, tagIndex) => (
+                  <option key={tagIndex} value={tag}>
+                      {tag}
+                  </option>
+              ))}
+              <option value={customTag}>Input custom tag..</option>
+            </select>
+            {currentTag === customTag && (
+              <input
+                type="text"
+                value={customTag}
+                onChange={handleCustomTag}
+                onBlur={handleCustomBlur}
+                placeholder="Type your own tag"
+              />
+            )}
+          </span>
+        
+        )
+      }
+
     
     return (
       <div>
@@ -122,7 +172,7 @@ export async function Tasklist(props) {
                     }}
                     className='text-dark'
                   >      
-                    {tagList.map((tag, tagIndex) => (
+                    {tagsList.map((tag, tagIndex) => (
                         <option key={tagIndex} value={tag}>
                             {tag}
                         </option>
@@ -151,16 +201,6 @@ export async function Tasklist(props) {
                           <li key={index}>
                             <input type="checkbox" id={`task-${index}`} onClick={() => {handleCheckboxClick(task.taskId)}}/>
                             <label htmlFor={`task-${index}`}>{task.description}</label>
-                            <select onChange={(e) => {
-                                editTaskTag(task.taskId, e)
-                              }} className='text-dark'>
-                              {/* Map over tags and render options */}
-                              {tagList.map((tag, tagIndex) => (
-                                  <option key={tagIndex} value={tag}>
-                                      {tag}
-                                  </option>
-                              ))}
-                          </select>
                           </li>
                       ))}
                       </ul>

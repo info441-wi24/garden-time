@@ -9,10 +9,12 @@ router.get('/', async (req, res) =>{
         if(req.session.account.username !== undefined) {
             
             let usernameVar = req.query.username;
-            let usernameTasks = await req.models.Task.find({user: usernameVar})
+            let userInfo = await req.models.User.findOne({user: usernameVar})
            
+            let userTasks = await req.models.Task.find({user: userInfo._id})
+
             let taskData = await Promise.all(
-                usernameTasks.map(async task => { 
+                userTasks.map(async task => { 
                     try{
                         console.log("TASK", task)
                         return {"description": task.description, "taskId":task._id, "tag": task.tag}
@@ -42,11 +44,14 @@ router.post('/', async (req, res) => {
         try{
         
             console.log("REQ BODY PARAMS", req.body )
+            let usernameVar = req.query.username;
+            let userInfo = await req.models.User.findOne({user: usernameVar})
+        
     
             const newTask = new req.models.Task({
                 description: req.body.task,
                 created_date: new Date(),
-                username: req.session.account.username,
+                user: userInfo._id,
                 tag: req.body.tag
             })
             console.log("NEW Task:"  , newTask);
@@ -66,9 +71,9 @@ router.post('/tag', async (req, res) => {
          try{
          
             let usernameVar = req.query.username;
-            let userValues= await req.models.User.findById(req.body.id)
+            let userInfo = await req.models.User.findOne({user: usernameVar})
         
-            userValues.tag = req.body.tag
+            userInfo.tag = req.body.tag
 
             await userValues.save()
      
