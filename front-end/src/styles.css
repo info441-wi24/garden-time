@@ -263,3 +263,21 @@ img.tomato-logo {
   height: auto;
   margin-right: 1rem;
 }
+
+.custom-tag-popup {
+  position: relative;
+  margin-top: 10px; /* Adjust spacing as needed */
+}
+
+.custom-tag-popup input[type="text"] {
+  width: 200px; /* Adjust width as needed */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.custom-tag-popup input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff; /* Example focus color, customize as needed */
+}

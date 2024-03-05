@@ -6,11 +6,17 @@ export function Tasklist(props) {
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [newTask, setNewTask] = useState('');
-    const [currentTag, setCurrentTag] = useState('not-started'); // Initialize with default value
+    const [currentTag, setCurrentTag] = useState('Not Started');
     const [customTag, setCustomTag] = useState('');
     const [tagsList, setTagsList] = useState([]);
+    const [showCustomTagInput, setShowCustomTagInput] = useState(false);
 
 
+    // calls fetch tasks and fetch tags first when the page loads
+    useEffect(async ()=>{
+        await fetchTags();
+        await fetchTasks();
+    },[]);
     
     const fetchTags = async() => {
       try {
@@ -94,13 +100,16 @@ export function Tasklist(props) {
       };
 
       let handleCustomTag = (e) => {
+        console.log("setting custom tag input");
         setCustomTag(e.target.value);
+        setShowCustomTagInput(true);
       };
 
       
       let handleCustomBlur = (e) => {
         setCurrentTag(customTag);
         console.log(currentTag);
+        setShowCustomTagInput(false);
       };
 
       let editTaskTag = async (taskId, e) => {
@@ -112,42 +121,7 @@ export function Tasklist(props) {
           },
           body: JSON.stringify({tag: e.target.value, id: taskId}),
         });
-        
       }
-
-      let tagOptions = () => {
-        fetchTags();
-        console.log("Fetching tags", tagsList);
-        return (
-          <span>
-            <select value={currentTag}
-              onChange={(e) => {
-                setCurrentTag(e.target.value);
-                setCustomTag('');
-              }}
-              className='text-dark'
-            >      
-              {tagsList.map((tag, tagIndex) => (
-                  <option key={tagIndex} value={tag}>
-                      {tag}
-                  </option>
-              ))}
-              <option value={customTag}>Input custom tag..</option>
-            </select>
-            {currentTag === customTag && (
-              <input
-                type="text"
-                value={customTag}
-                onChange={handleCustomTag}
-                onBlur={handleCustomBlur}
-                placeholder="Type your own tag"
-              />
-            )}
-          </span>
-        
-        )
-      }
-
     
     return (
       <div>
@@ -165,32 +139,39 @@ export function Tasklist(props) {
                     onChange={(e) => setNewTask(e.target.value)}
                     placeholder="Enter task..."
                   />
-                  <select value={currentTag}
-                    onChange={(e) => {
-                      setCurrentTag(e.target.value);
-                      setCustomTag('');
-                    }}
-                    className='text-dark'
-                  >      
+                   <select
+                      value={currentTag}
+                      onChange={(e) => {
+                        const selectedTag = e.target.value;
+                        setCurrentTag(selectedTag);
+                        if (selectedTag === 'custom') {
+                          setShowCustomTagInput(true);
+                        } else {
+                          setCustomTag('');
+                        }
+                      }}
+                      className='text-dark'
+                    >
                     {tagsList.map((tag, tagIndex) => (
                         <option key={tagIndex} value={tag}>
                             {tag}
                         </option>
                     ))}
-                    <option value={customTag}>Input custom tag..</option>
+                    <option value={"custom"}>Input custom tag..</option>
                   </select>
-                  {currentTag === customTag && (
-                    <input
-                      type="text"
-                      value={customTag}
-                      onChange={handleCustomTag}
-                      onBlur={handleCustomBlur}
-                      placeholder="Type your own tag"
-                    />
+                  {showCustomTagInput && (
+                    <div className="custom-tag-popup">
+                      <input
+                        type="text"
+                        value={customTag}
+                        onChange={handleCustomTag}
+                        onBlur={handleCustomBlur}
+                        placeholder="Type your own tag"
+                      />
+                    </div>
                   )}
                   <br/>
                   <button onClick={handleAddTask}>Add Task</button>
-                  <button onClick={fetchTasks}>See My Tasks</button>
                 </div>
                 {isLoading ? (
                     <p>Loading...</p>
