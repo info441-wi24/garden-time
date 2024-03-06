@@ -26,7 +26,7 @@ router.post('/', async (req, res) =>{
         
         const newUser = new req.models.User({
             username: req.session.account.username,
-            name: req.session.account.name, 
+            name: req.session.account.name,
             ThemePreference: "", 
             created_date: new Date(),
             created_tags: ["Not Started", "In Progress", "Completed"]

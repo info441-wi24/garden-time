@@ -11,20 +11,26 @@ dotenv.config();
 
 import WebAppAuthProvider from 'msal-node-wrapper'
 
+// for google authentication
+import session from "express-session";
+import passport from "passport";
+import passportLocalMongoose from "passport-local-mongoose";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import findOrCreate from "mongoose-findorcreate";
+
 const authConfig = {
-    auth: {
-        clientId: "694c3e20-5c5c-4aba-82ea-70df9da00fb0",
-        authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
-        clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
-        redirectUri: "/redirect"
-    },
     // auth: {
-        
-    //     clientId: `${process.env.CLIENT_ID}`,
-    //     authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
-    //     clientSecret: `${process.env.CLIENT_SECRET}`,
-    //     redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
-    // },    
+    //     clientId: "694c3e20-5c5c-4aba-82ea-70df9da00fb0",
+    //     authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
+    //     clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
+    //     redirectUri: "/redirect"
+    // },
+    auth: {
+        clientId: `${process.env.MICROSOFT_CLIENT_ID}`,
+        authority: `https://login.microsoftonline.com/${process.env.MICROSOFT_TENANT_ID}`,
+        clientSecret: `${process.env.MICROSOFT_CLIENT_SECRET}`,
+        redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+    },    
     system: {
         loggerOptions: {
             loggerCallback(loglevel, message, containsPii) {
@@ -62,6 +68,52 @@ app.use(sessions({
     cookie: {maxAge: oneDay},
     resave: false
 }))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(models.User.createStrategy());
+
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async function(id, done) {
+    try {
+      const user = await models.User.findById(id);
+      done(null, user);
+    } catch (err) {
+      done(err, null);
+    }
+  });
+  
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/auth/google/callback",
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    models.User.findOrCreate({ googleId: profile.id, username: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+// Google auth route
+app.get("/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+
+// Google auth callback
+app.get("/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  function(req, res) {
+    res.redirect("/postlogin");
+  }
+);
+
 
 const authProvider = await WebAppAuthProvider.WebAppAuthProvider.initialize(authConfig);
 app.use(authProvider.authenticate());
@@ -137,6 +189,5 @@ app.get('/postlogin', async (req, res) => {
 app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../front-end/build', 'index.html/'));
   });
-
 
 export default app;
