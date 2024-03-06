@@ -36,6 +36,34 @@ export function PomodoroTimer(props) {
     setTime(25 * 60);
   };
 
+  const showNotification = () => {
+    if ("Notification" in window) {
+      Notification.requestPermission().then(
+        function(permission) {
+          if (permission === "granted") {
+            const notification = new Notification("Your plant has grown!", {
+              body: "Time to take a break!",
+            });
+            document.addEventListener("visibilitychange", () => {
+              if (document.visibilityState === "visible") {
+                notification.close();
+              }
+            });
+          } else if (permission === "denied" || permission === "default") {
+            window.location.href = "/settings";
+          }
+        }
+      );
+    }
+
+    const n = new Notification("Your plant has grown!");
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        n.close();
+      };
+    })
+  };
+
   return (
     <div>
       <header>

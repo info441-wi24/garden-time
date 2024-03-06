@@ -27,13 +27,15 @@ export function LogIn(props) {
         <div className='intro'>
             <h1>NURTURE YOUR PRODUCTIVITY WITH GARDEN TIME</h1>
             <div className='login'>
-                <button className='microsoft-auth' 
-                onClick={async () => {
+                <div className="auth-login">
+                    <button className='microsoft-auth' 
+                        onClick={async () => {
                     await handleLogIn()
                     }}>Login with Microsoft
-                </button>
-                <button className="canvas-auth">Login with Canvas</button>
-                <button className="canvas-auth">Login with Canvas</button>
+                    </button>
+                    <button className="google-auth">Login with Google</button>
+                    <button className="canvas-auth">Login with Canvas</button>
+                </div>
                 <p>OR</p>
                 <button className='guest' onClick={handleContinueWithoutAccount}>Continue Without Account</button>
             </div>

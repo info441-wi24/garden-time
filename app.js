@@ -18,13 +18,6 @@ const authConfig = {
         clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
         redirectUri: "/redirect"
     },
-    // auth: {
-        
-    //     clientId: `${process.env.CLIENT_ID}`,
-    //     authority: `https://login.microsoftonline.com/${process.env.AUTHORITY}`,
-    //     clientSecret: `${process.env.CLIENT_SECRET}`,
-    //     redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
-    // },    
     system: {
         loggerOptions: {
             loggerCallback(loglevel, message, containsPii) {
@@ -102,7 +95,6 @@ app.get(
 app.get('/postlogin', async (req, res) => {
     console.log("reached the api router for users");
     try{
-        
         const existingUser = await req.models.User.findOne({ username: req.session.account.username });
 
         if (existingUser) {
@@ -123,10 +115,6 @@ app.get('/postlogin', async (req, res) => {
     
             res.redirect("/#/home")
         }
-        
-        
-        
-
     }catch(error){
         console.log("Error getting tags from db", error)
         res.send(500).json({"status": "error", "error": error})

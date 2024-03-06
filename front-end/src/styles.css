@@ -48,7 +48,7 @@ body {
   margin: 20px;
 }
 
-.start, .reset, .microsoft-auth, .guest, .pomodoro, .break-time, .tag {
+.start, .reset, .microsoft-auth, .guest, .pomodoro, .break-time, .tag, .google-auth, .canvas-auth {
   outline: none;
   font-size: 14px;
   border-radius: 500px;
@@ -84,13 +84,17 @@ body {
   margin-top: 15%;
 }
 
-.microsoft-auth, .guest {
+.microsoft-auth, .guest, .google-auth, .canvas-auth {
   color: #000000;
   background-color: #ffffff;
   width: 370px
 }
 
-.microsoft-auth {
+.microsoft-auth, .google-auth, .canvas-auth {
+  margin: 5px;
+}
+
+.auth-login {
  margin-bottom: 20px;
 }
 
