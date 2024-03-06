@@ -50,6 +50,15 @@ export function LogIn(props) {
                     }}>Login with Google</button>
                 <p>OR</p>
                 <button className='ms' onClick={handleContinueWithoutAccount}>Continue Without Account</button>
+                {/* <button className='microsoft-auth' 
+                onClick={async () => {
+                    await handleLogIn()
+                    }}>Login with Microsoft
+                </button>
+                <button className="canvas-auth">Login with Canvas</button>
+                <button className="canvas-auth">Login with Canvas</button>
+                <p>OR</p>
+                <button className='guest' onClick={handleContinueWithoutAccount}>Continue Without Account</button> */}
             </div>
         </div>
     );

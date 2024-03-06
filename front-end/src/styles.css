@@ -48,7 +48,7 @@ body {
   margin: 20px;
 }
 
-.start, .reset, .ms, .pomodoro, .break-time, .tag {
+.start, .reset, .microsoft-auth, .guest, .pomodoro, .break-time, .tag {
   outline: none;
   font-size: 14px;
   border-radius: 500px;
@@ -71,9 +71,9 @@ body {
 
 .login {
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.3);
-  width: 30%;
-  margin: 0 34%;
+  background-color: #C7DAC8;
+  width: 34%;
+  margin: 2rem 34%;
   border-radius: 5%;
   font-size: 20px;
 }
@@ -84,13 +84,15 @@ body {
   margin-top: 15%;
 }
 
-.ms {
+.microsoft-auth, .guest {
   color: #000000;
   background-color: #ffffff;
-  margin: 20px;
-  align-items: baseline;
+  width: 370px
 }
 
+.microsoft-auth {
+ margin-bottom: 20px;
+}
 
 /* .nav-bar {
   display: flex;
@@ -262,4 +264,22 @@ img.tomato-logo {
   width: 40px;
   height: auto;
   margin-right: 1rem;
+}
+
+.custom-tag-popup {
+  position: relative;
+  margin-top: 10px; /* Adjust spacing as needed */
+}
+
+.custom-tag-popup input[type="text"] {
+  width: 200px; /* Adjust width as needed */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.custom-tag-popup input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff; /* Example focus color, customize as needed */
 }
