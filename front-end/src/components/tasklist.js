@@ -6,10 +6,19 @@ export function Tasklist(props) {
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [newTask, setNewTask] = useState('');
+    const [tagsList, setTagsList] = useState([]);
+
+
     const [currentTag, setCurrentTag] = useState('Not Started');
     const [customTag, setCustomTag] = useState('');
-    const [tagsList, setTagsList] = useState([]);
     const [showCustomTagInput, setShowCustomTagInput] = useState(false);
+
+
+    const [currentTaskTag, setCurrentTaskTag] = useState('');
+    const [customTaskTag, setCustomTaskTag] = useState('');
+    const [showCustomTaskTagInput, setShowCustomTaskTagInput] = useState(false);
+
+    
 
 
     // calls fetch tasks and fetch tags first when the page loads
@@ -112,16 +121,29 @@ export function Tasklist(props) {
         setShowCustomTagInput(false);
       };
 
-      let editTaskTag = async (taskId, e) => {
+      let editTaskTag = async (taskId) => {
          // add the new tag to all of the user tags if needed 
          await fetch('/api/v1/tasks/tag', {
           method: 'POST',
           headers : {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({tag: e.target.value, id: taskId}),
+          body: JSON.stringify({tag: currentTaskTag, id: taskId}),
         });
       }
+
+      let handleCustomTaskTag = (e) => {
+        console.log("setting custom tag input");
+        setCustomTaskTag(e.target.value);
+        setShowCustomTaskTagInput(true);
+      };
+
+      
+      let handleCustomTaskTagBlur = (e) => {
+        setCurrentTaskTag(customTag);
+        setShowCustomTaskTagInput(false);
+      };
+    
     
     return (
       <div>
@@ -163,7 +185,6 @@ export function Tasklist(props) {
                     <div className="custom-tag-popup">
                       <input
                         type="text"
-                        value={customTag}
                         onChange={handleCustomTag}
                         onBlur={handleCustomBlur}
                         placeholder="Type your own tag"
@@ -182,6 +203,37 @@ export function Tasklist(props) {
                           <li key={index}>
                             <input type="checkbox" id={`task-${index}`} onClick={() => {handleCheckboxClick(task.taskId)}}/>
                             <label htmlFor={`task-${index}`}>{task.description}</label>
+                            <select
+                              value={task.tag}
+                              onChange={(e) => {
+                                const selectedTag = e.target.value;
+                                setCurrentTaskTag(selectedTag);
+                                if (selectedTag === 'custom') {
+                                  setShowCustomTaskTagInput(true);
+                                } else {
+                                  setCustomTaskTag('');
+                                }
+                              }}
+                              className='text-dark'
+                            >
+                              {tagsList.map((tag, tagIndex) => (
+                                  <option key={tagIndex} value={tag}>
+                                      {tag}
+                                  </option>
+                              ))}
+                              <option value={"custom"}>Input custom tag..</option>
+                            </select>
+                            {showCustomTaskTagInput && (
+                              <div className="custom-tag-popup">
+                                <input
+                                  type="text"
+                                  value={customTaskTag}
+                                  onChange={handleCustomTaskTag}
+                                  onBlur={handleCustomTaskTagBlur}
+                                  placeholder="Type your own tag"
+                                />
+                              </div>
+                            )}
                           </li>
                       ))}
                       </ul>
