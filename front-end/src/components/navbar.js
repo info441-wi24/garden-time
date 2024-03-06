@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import { Navbar, Nav } from 'react-bootstrap';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import RoomPreferencesRoundedIcon from '@mui/icons-material/RoomPreferencesRounded';
+import SettingsBrightnessRoundedIcon from '@mui/icons-material/SettingsBrightnessRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import 'boxicons';
 
 export function NavBar(props) {
@@ -60,22 +65,28 @@ export function NavBar(props) {
                 <ul>
                     <li>
                         <NavLink to="/home">
-                            <box-icon name='home-circle' ></box-icon>
-                            <span className="nav-item">Home</span>
+                            <div className="route-row">
+                                <HomeRoundedIcon style={{fontSize: 30}}></HomeRoundedIcon>
+                                <span className="nav-item">Home</span>
+                            </div>
                         </NavLink>
                         <span className="tooltip">Home</span>
                     </li>
                     <li>
                         <NavLink to="/tasks">
-                            <box-icon name='task' ></box-icon>
-                            <span className="nav-item">Tasks</span>
+                            <div className="route-row">
+                                <AssignmentRoundedIcon style={{fontSize: 26}}></AssignmentRoundedIcon>
+                                <span className="nav-item">Tasks</span>
+                            </div>
                         </NavLink>
                         <span className="tooltip">Tasks</span>
                     </li>
                     <li>
                         <NavLink to="/settings">
-                            <box-icon name='cog' ></box-icon>
-                            <span className="nav-item">Settings</span>
+                            <div className="route-row">
+                                <RoomPreferencesRoundedIcon style={{fontSize: 28}}></RoomPreferencesRoundedIcon>
+                                <span className="nav-item">Settings</span>
+                            </div>
                         </NavLink>
                         <span className="tooltip">Settings</span>
                     </li>
@@ -83,30 +94,24 @@ export function NavBar(props) {
                     {/* <li>
                         <a href="#">
                             <box-icon name='sun' ></box-icon>
+                            <SettingsBrightnessRoundedIcon style={{fontSize: 20}}></SettingsBrightnessRoundedIcon>
                             <span className="nav-item">Light mode</span>
                         </a>
                         <span className="tooltip">Light mode</span>
                     </li> */}
                     <li>
                         <NavLink to="/logout" onClick={handleLoginLogout}>
-                            <box-icon name='log-out' ></box-icon>
-                            <span className="nav-item"></span>
-                            {isLoggedIn ? 'LogOut' : 'LogIn'}
+                            <div className="route-row">
+                                <LogoutRoundedIcon style={{fontSize: 24}}></LogoutRoundedIcon>
+                                <span className="nav-item">
+                                {isLoggedIn ? 'Log out' : 'Login'}</span>
+                                {/* TODO: Figure out logic so that icons match state of Login */}
+                            </div>
                         </NavLink>
                         <span className="tooltip"></span>
                     </li>
                 </ul>
             </div>
         </div>
-        //     <Navbar variant="null" className="nav-bar">
-        //         <Nav>
-        //             <NavLink className="nav-item" to="/home">Home</NavLink>
-        //             <NavLink className="nav-item" to="/tasks">Tasks</NavLink>
-        //             <NavLink className="nav-item" to="/" onClick={handleLoginLogout}>
-        //                 {isLoggedIn ? 'LogOut' : 'LogIn'}
-        //             </NavLink>
-        //         </Nav>
-        //     </Navbar>
-        // </div>
     );
 }

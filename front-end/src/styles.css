@@ -244,22 +244,28 @@ button {
   display: flex;
   text-decoration: none;
   border-radius: 0.8rem;
-  align-items: baseline;
+  align-items: center;
 }
 
 .sidebar ul li a:hover {
   background-color: #E0EFE1;
 }
 
-box-icon {
+.HomeRoundedIcon, .AssignmentRoundedButtonIcon, .RoomPreferencesRoundedIcon, .LogoutRoundedIcon {
   min-width: 50px;
-  margin-left: 1rem;
-  align-self: baseline;
+  align-self: center;
 }
 
 .sidebar .nav-item {
   opacity: 1;
   margin-left: 2rem;
+}
+
+.route-row {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 85%;  
 }
 
 .sidebar ul li .tooltip {
@@ -285,6 +291,7 @@ img.tomato-logo {
   margin-right: 1rem;
 }
 
+/* CUSTOM TAGS */
 .custom-tag-popup {
   position: relative;
   margin-top: 10px; /* Adjust spacing as needed */
