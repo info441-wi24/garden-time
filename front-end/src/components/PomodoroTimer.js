@@ -20,7 +20,8 @@ export function PomodoroTimer(props) {
     if (time === 0) {
       clearInterval(interval);
       setIsActive(false);
-      alert("Time to take a break!");
+      // alert("Time to take a break!");
+      showNotification();
     }
 
     return () => clearInterval(interval);
