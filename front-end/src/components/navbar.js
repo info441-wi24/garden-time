@@ -18,6 +18,7 @@ export function NavBar(props) {
                 return response.json();
             })
             .then(content => {
+                console.log(content.status);
                 if (content && content.status === "loggedin") {
                     setIsLoggedIn(true);
                 } else {
@@ -89,10 +90,10 @@ export function NavBar(props) {
                     <li>
                         <NavLink to="/logout" onClick={handleLoginLogout}>
                             <box-icon name='log-out' ></box-icon>
-                            <span className="nav-item">Logout</span>
+                            <span className="nav-item"></span>
                             {isLoggedIn ? 'LogOut' : 'LogIn'}
                         </NavLink>
-                        <span className="tooltip">Logout</span>
+                        <span className="tooltip"></span>
                     </li>
                 </ul>
             </div>

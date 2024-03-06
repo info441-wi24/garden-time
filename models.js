@@ -20,6 +20,7 @@ console.log("successfully connected to mongodb")
 const userSchema = new mongoose.Schema({
     username: String,
     name: String,
+    googleId: String,
     ThemePreference: String,
     created_date: Date,
     created_tags: [String]

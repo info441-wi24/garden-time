@@ -12,7 +12,6 @@ dotenv.config();
 import WebAppAuthProvider from 'msal-node-wrapper'
 
 // for google authentication
-import session from "express-session";
 import passport from "passport";
 import passportLocalMongoose from "passport-local-mongoose";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
@@ -94,12 +93,23 @@ passport.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
-  function(accessToken, refreshToken, profile, cb) {
-    models.User.findOrCreate({ googleId: profile.id, username: profile.id }, function (err, user) {
-      return cb(err, user);
+  function(accessToken, refreshToken, profile, done) {
+    // It's crucial to handle the case where the email may not be provided.
+    const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : `unknown-${profile.id}@noemail.com`;
+
+    // Now, use the email as a username (or however you wish to structure this)
+    models.User.findOrCreate({ googleId: profile.id }, {
+      username: email,
+      name: `${profile.name.givenName} ${profile.name.familyName}`,
+      ThemePreference: "",
+      created_date: new Date(),
+      created_tags: ["Not Started", "In Progress", "Completed"]
+    }, function (err, user) {
+      return done(err, user);
     });
   }
 ));
+
 
 // Google auth route
 app.get("/auth/google",
@@ -110,9 +120,13 @@ app.get("/auth/google",
 app.get("/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   function(req, res) {
-    res.redirect("/postlogin");
+    // Setting the isAuthenticated flag after successful Google authentication
+    req.session.isAuthenticated = true;
+    req.session.authType = 'google';
+    res.redirect("/#/home");
   }
 );
+
 
 
 const authProvider = await WebAppAuthProvider.WebAppAuthProvider.initialize(authConfig);
@@ -141,49 +155,86 @@ app.get(
 	}
 );
 
-app.get(
-	'/signout',
-	(req, res, next) => {
-		return req.authContext.logout({
-            //postLogoutRedirectUri: "/postlogin"
-			postLogoutRedirectUri: "/#/home", // redirect here after logout
-		})(req, res, next);
-	}
-);
+// app.get(
+// 	'/signout',
+// 	(req, res, next) => {
+// 		return req.authContext.logout({
+//             //postLogoutRedirectUri: "/postlogin"
+// 			postLogoutRedirectUri: "/#/home", // redirect here after logout
+// 		})(req, res, next);
+// 	}
+// );
 
 app.get('/postlogin', async (req, res) => {
-    console.log("reached the api router for users");
-    try{
-        
-        const existingUser = await req.models.User.findOne({ username: req.session.account.username });
+    console.log("Reached the API router for users");
+    req.session.authType = 'microsoft';
+    try {
+        let existingUser = null;
 
+        // Try to find the user by username or Google ID based on the session info.
+        try {
+            if (req.session.account && req.session.account.username) {
+                existingUser = await req.models.User.findOne({ username: req.session.account.username });
+            }
+            if (!existingUser && req.session.passport && req.session.passport.user) {
+                existingUser = await req.models.User.findOne({ googleId: req.session.passport.user });
+            }
+        } catch (error) {
+            console.error("Error during user lookup:", error);
+            return res.status(500).json({ status: "error", error: "Error during user lookup" });
+        }
+
+        // Check if the user exists, if so, redirect to home.
         if (existingUser) {
-            res.redirect("/#/home");
-            return;
+            return res.redirect('/#/home');
         }
-        else {
-            const newUser = new req.models.User({
-                username: req.session.account.username,
-                name: req.session.account.name, 
-                ThemePreference: "", 
-                created_date: new Date(),
-                created_tags: ["Not Started", "In Progress", "Completed"]
-            })
-            console.log("NEW user:"  , newUser);
-    
-            await newUser.save()
-    
-            res.redirect("/#/home")
-        }
-        
-        
-        
 
-    }catch(error){
-        console.log("Error getting tags from db", error)
-        res.send(500).json({"status": "error", "error": error})
+        // Create a new user based on the session information available.
+        let newUserDetails = {
+            username: req.session.account ? req.session.account.username : undefined,
+            name: req.session.account ? req.session.account.name : undefined,
+            googleId: req.session.passport ? req.session.passport.user : undefined,
+            ThemePreference: "", // Assuming default theme preference is empty
+            created_date: new Date(),
+            created_tags: ["Not Started", "In Progress", "Completed"]
+        };
+
+        // Note: You need to handle the case where neither username nor googleId is available.
+        if (!newUserDetails.username && !newUserDetails.googleId) {
+            console.error("No sufficient session information to create a user.");
+            return res.status(400).json({ status: "error", error: "Insufficient session information." });
+        }
+
+        const newUser = new req.models.User(newUserDetails);
+        console.log("NEW user:", newUser);
+
+        await newUser.save();
+        res.redirect("/#/home");
+    } catch (error) {
+        console.error("Error in post-login processing", error);
+        res.status(500).json({ "status": "error", "error": error });
     }
-})
+});
+
+app.get('/signout', (req, res) => {
+    if (req.session.authType === 'google') {
+        req.logout(function(err) {
+            if (err) { return next(err); }
+            req.session.destroy(() => {
+                res.redirect('/');  // Or wherever you want to redirect post-logout
+            });
+        });
+    } else if (req.session.authType === 'microsoft') {
+        // Microsoft logout logic
+        console.log("logout of microsoft");
+        return req.authContext.logout({
+            postLogoutRedirectUri: "/#/home",  // Example redirect URI
+        })(req, res);
+    } else {
+        // Default action for other cases or if not authenticated
+        res.redirect('/');
+    }
+});
 
 // All other GET requests not handled before will return our React app
 app.get('/', (req, res) => {

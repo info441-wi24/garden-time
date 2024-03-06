@@ -4,30 +4,35 @@ var router = express.Router();
 /* GET users listing. */
 router.get('/myIdentity', function(req, res, next) {
     if(req.session.isAuthenticated){
+        // Accessing the email from the user loaded in the session
+        const email = req.user && req.user.email;  // Using req.user which should have been populated by Passport
+
         res.json({
             status: "loggedin", 
             userInfo: {
-               username: req.session.account.username,
-               name: req.session.account.name, 
-               ThemePreference: "", 
-               created_date: new Date(),
-               created_tags: ["Not Started", "In Progress", "Completed"]
+                username: req.session.account ? req.session.account.username : email,
+                name: req.session.account ? req.session.account.name : req.user && req.user.name.givenName && req.user.name.familyName,
+                googleId: req.session.passport ? req.session.passport.user : undefined,
+                ThemePreference: "",
+                created_date: new Date(),
+                created_tags: ["Not Started", "In Progress", "Completed"]
             }
-        })
-    
-    }else{
-        res.json({"status": "loggedout" });
+        });
+    } else {
+        res.json({ "status": "loggedout" });
     }
 });
+
 
 router.post('/', async (req, res) =>{
     console.log("reached the api router for users");
     try{
         
         const newUser = new req.models.User({
-            username: req.session.account.username,
-            name: req.session.account.name,
-            ThemePreference: "", 
+            username: req.session.account ? req.session.account.username : req.session.profile.emails[0],
+            name: req.session.account ? req.session.account.name : undefined,
+            googleId: req.session.passport ? req.session.passport.user : undefined,
+            ThemePreference: "", // Assuming default theme preference is empty
             created_date: new Date(),
             created_tags: ["Not Started", "In Progress", "Completed"]
         })
