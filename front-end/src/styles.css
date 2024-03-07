@@ -35,6 +35,12 @@ body {
   padding: 3px 30px;
 }
 
+.ontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .timer-text {
   text-align: center;
   font-size: 150px;
@@ -98,19 +104,6 @@ body {
  margin-bottom: 20px;
 }
 
-/* .nav-bar {
-  display: flex;
-  justify-content: right;
-  font-size: 25px;
-  text-transform: uppercase;
-  padding: 10px;
-}
-
-.nav-item {
-  margin: 0 10px;
-  color: #ffffff;
-} */
-
 * {
   font-family: 'Open Sans', sans-serif;
 }
@@ -126,10 +119,6 @@ height: 100%;
 
 .Homepage {
   height: 100%;
-}
-
-.taskbar-container {
-  margin: 20px;
 }
 
 .card {
@@ -155,6 +144,7 @@ margin-left: 5px;
 }
 
 .taskbar-container {
+  margin: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -166,8 +156,6 @@ margin-left: 5px;
   flex-direction: column;
   align-items: center;
 }
-
-
 
 input {
   color: #000000;
@@ -244,22 +232,28 @@ button {
   display: flex;
   text-decoration: none;
   border-radius: 0.8rem;
-  align-items: baseline;
+  align-items: center;
 }
 
 .sidebar ul li a:hover {
   background-color: #E0EFE1;
 }
 
-box-icon {
+.HomeRoundedIcon, .AssignmentRoundedButtonIcon, .RoomPreferencesRoundedIcon, .LogoutRoundedIcon {
   min-width: 50px;
-  margin-left: 1rem;
-  align-self: baseline;
+  align-self: center;
 }
 
 .sidebar .nav-item {
   opacity: 1;
   margin-left: 2rem;
+}
+
+.route-row {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 85%;  
 }
 
 .sidebar ul li .tooltip {
@@ -285,6 +279,7 @@ img.tomato-logo {
   margin-right: 1rem;
 }
 
+/* CUSTOM TAGS */
 .custom-tag-popup {
   position: relative;
   margin-top: 10px; /* Adjust spacing as needed */

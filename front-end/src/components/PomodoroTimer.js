@@ -4,6 +4,7 @@ import { NavBar } from './navbar';
 export function PomodoroTimer(props) {
   const [isActive, setIsActive] = useState(false);
   const [time, setTime] = useState(25 * 60);
+  const [initialTime, setInitialTime] = useState(25 * 60);
   const [status, setStatus] = useState('Start');
 
   useEffect(() => {
@@ -34,8 +35,21 @@ export function PomodoroTimer(props) {
 
   const handleReset = () => {
     setIsActive(false);
-    setTime(25 * 60);
+    setStatus('Start');
+    setTime(initialTime);
   };
+
+  const changeBreakTimer = () => {
+    const breakTime = 5 * 60;
+    setTime(breakTime);
+    setInitialTime(breakTime);
+  }
+
+  const changePomodoroTimer = () => {
+    const pomodoroTime = 25 * 60;
+    setTime(pomodoroTime);
+    setInitialTime(pomodoroTime);
+  }
 
   const showNotification = () => {
     if ("Notification" in window) {
@@ -67,13 +81,13 @@ export function PomodoroTimer(props) {
 
   return (
     <div>
-      <header>
+      <div>
         <NavBar />
-      </header>
+      </div>
       <div className="container">
         <div className="above-timer">
-          <button className="pomodoro">Pomodoro</button>
-          <button className="break-time">Break Time</button>
+          <button className="pomodoro" onClick={changePomodoroTimer}>Pomodoro</button>
+          <button className="break-time" onClick={changeBreakTimer}>Break Time</button>
           <button className="tag">Tag</button>
         </div>
         <div className="timer-container">

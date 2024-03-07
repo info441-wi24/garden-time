@@ -3,7 +3,8 @@ import express from 'express';
 
 
 import tasksRouter from './controllers/tasks.js';
-import usersRouter from './controllers/users.js'
+import usersRouter from './controllers/users.js';
+// import spotifyRouter from '.controllers/spotify.js';
 
 
 var router = express.Router();
@@ -14,6 +15,7 @@ router.get('/', (req, res) => {
 
 router.use('/tasks', tasksRouter);
 router.use('/users', usersRouter);
+// router.use('/spotify', spotifyRouter);
 
 export default router;
 
