@@ -41,7 +41,7 @@ export function NavBar(props) {
             if (isLoggedIn) {
                 window.location.href = "/signout";
             } else {
-                window.location.href = "/signin";
+                window.location.href = "/";
             }
         } catch (error) {
             console.log("error: ", error);
