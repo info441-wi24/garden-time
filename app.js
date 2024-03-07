@@ -220,8 +220,8 @@ app.get('/signout', (req, res) => {
     if (req.session.authType === 'google') {
         req.logout(function(err) {
             if (err) { return next(err); }
-            req.session.destroy(() => {
-                res.redirect('/');  // Or wherever you want to redirect post-logout
+                req.session.destroy(() => {
+                    res.redirect('/');  // Or wherever you want to redirect post-logout
             });
         });
     } else if (req.session.authType === 'microsoft') {
