@@ -6,6 +6,7 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import RoomPreferencesRoundedIcon from '@mui/icons-material/RoomPreferencesRounded';
 import SettingsBrightnessRoundedIcon from '@mui/icons-material/SettingsBrightnessRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import 'boxicons';
 
 export function NavBar(props) {
@@ -100,12 +101,16 @@ export function NavBar(props) {
                         <span className="tooltip">Light mode</span>
                     </li> */}
                     <li>
-                        <NavLink to="/logout" onClick={handleLoginLogout}>
+                        <NavLink to={isLoggedIn ? "/logout" : "/login"} onClick={handleLoginLogout}>
                             <div className="route-row">
-                                <LogoutRoundedIcon style={{fontSize: 24}}></LogoutRoundedIcon>
+                                {isLoggedIn ? (
+                                    <LogoutRoundedIcon style={{fontSize: 24}} />
+                                ) : (
+                                    <LoginRoundedIcon style={{fontSize: 24}} />
+                                )}
                                 <span className="nav-item">
-                                {isLoggedIn ? 'Log out' : 'Login'}</span>
-                                {/* TODO: Figure out logic so that icons match state of Login */}
+                                {isLoggedIn ? 'Log out' : 'Login'}
+                                </span>
                             </div>
                         </NavLink>
                         <span className="tooltip"></span>
