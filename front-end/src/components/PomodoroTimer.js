@@ -21,8 +21,7 @@ export function PomodoroTimer(props) {
     if (time === 0) {
       clearInterval(interval);
       setIsActive(false);
-      // alert("Time to take a break!");
-      showNotification();
+      alert("Nice work! Time to take a break!");
     }
 
     return () => clearInterval(interval);
@@ -39,44 +38,10 @@ export function PomodoroTimer(props) {
     setTime(initialTime);
   };
 
-  const changeBreakTimer = () => {
-    const breakTime = 5 * 60;
-    setTime(breakTime);
-    setInitialTime(breakTime);
-  }
-
-  const changePomodoroTimer = () => {
-    const pomodoroTime = 25 * 60;
-    setTime(pomodoroTime);
-    setInitialTime(pomodoroTime);
-  }
-
-  const showNotification = () => {
-    if ("Notification" in window) {
-      Notification.requestPermission().then(
-        function(permission) {
-          if (permission === "granted") {
-            const notification = new Notification("Your plant has grown!", {
-              body: "Time to take a break!",
-            });
-            document.addEventListener("visibilitychange", () => {
-              if (document.visibilityState === "visible") {
-                notification.close();
-              }
-            });
-          } else if (permission === "denied" || permission === "default") {
-            window.location.href = "/settings";
-          }
-        }
-      );
-    }
-
-    const n = new Notification("Your plant has grown!");
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        n.close();
-      };
-    })
+  const handleChangeTime = (event) => {
+    const newTime = event.target.value * 60;
+    setTime(newTime);
+    setInitialTime(newTime);
   };
 
   return (
@@ -86,17 +51,27 @@ export function PomodoroTimer(props) {
       </div>
       <div className="container">
         <div className="above-timer">
-          <button className="pomodoro" onClick={changePomodoroTimer}>Pomodoro</button>
-          <button className="break-time" onClick={changeBreakTimer}>Break Time</button>
+          <button className="pomodoro" onClick={handleReset}>Reset</button>
         </div>
         <div className="timer-container">
           <div className="timer-text">
             {`${Math.floor(time / 60)}:${time % 60 < 10 ? `0${time % 60}` : time % 60}`}
           </div>
         </div>
+        <div className="time-input">
+          <input
+            className="time-input-min"
+            type="number"
+            value={time / 60}
+            onChange={handleChangeTime}
+            min="1"
+            max="180"
+            step="1"
+          />
+          <p className="minutes">minutes</p>
+        </div>
         <div className="below-timer">
           <button className="start" onClick={handleActivation}>{status}</button>
-          <button className="reset" onClick={handleReset}>Reset</button>
         </div>
       </div>
     </div>
