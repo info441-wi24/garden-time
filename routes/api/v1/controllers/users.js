@@ -29,7 +29,7 @@ router.post('/', async (req, res) =>{
     try{
         
         const newUser = new req.models.User({
-            username: req.session.account ? req.session.account.username : req.session.profile.emails[0],
+            username: req.session.account ? req.session.account.username : req.session.profile.emails[0].value,
             name: req.session.account ? req.session.account.name : undefined,
             googleId: req.session.passport ? req.session.passport.user : undefined,
             ThemePreference: "", // Assuming default theme preference is empty
@@ -52,28 +52,31 @@ router.post('/', async (req, res) =>{
 
 
 //modifying the user tags
-router.get('/tag', async (req, res) =>{
+router.get('/tag', async (req, res) => {
     console.log("reached the api router for tags");
-    try{
-        
-        if(req.session.account.username !== undefined) {
-            
-            let usernameVar = req.session.account.username
-            let usernameValues= await req.models.User.find({username: usernameVar})
-        
-            res.send(usernameValues[0].created_tags)
-        }
-        else {
-            res.send(["Not Started", "In Progress", "Completed"])
-        }
-        
-        
+    try {
+        if (req.session.authType === 'microsoft') {
+            if (req.session.account && req.session.account.username !== undefined) {
+                let usernameVar = req.session.account.username;
+                let usernameValues = await req.models.User.find({username: usernameVar});
+                return res.send(usernameValues[0].created_tags);
+            }
+        } else if (req.session.authType === 'google') {
+            if (req.session.passport && req.session.passport.user !== undefined) {
+                let user_google_id = req.session.passport.user;
+                let userValues = await req.models.User.find({_id: req.session.passport.user});
+                console.log(userValues);
 
-    }catch(error){
-        console.log("Error getting tags from db", error)
-        res.send(500).json({"status": "error", "error": error})
+                return res.send(userValues[0].created_tags);
+            }
+        }
+        return res.send(["Not Started", "In Progress", "Completed"]);
+    } catch (error) {
+        console.log("Error getting tags from db", error);
+        return res.status(500).json({"status": "error", "error": error});
     }
-})
+});
+
 
 router.post('/tag', async (req, res) =>{
     console.log("reached the api router for user tags");
