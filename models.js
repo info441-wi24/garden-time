@@ -11,7 +11,7 @@ let models = {};
 console.log("connecting to mongodb");
 
 // Replace this with your connection string.
-await mongoose.connect(`mongodb+srv://dtsing:${process.env.MONGODB_PWD}@cluster0.iwtjjcp.mongodb.net/garden_time`);
+await mongoose.connect(`mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PWD}@cluster0.iwtjjcp.mongodb.net/garden_time`);
 
 console.log("successfully connected to mongodb")
 
