@@ -6,6 +6,7 @@ export function PomodoroTimer(props) {
   const [time, setTime] = useState(25 * 60);
   const [initialTime, setInitialTime] = useState(25 * 60);
   const [status, setStatus] = useState('Start');
+  const [shouldShowTimer, setTimerDisplay] = useState(true);
 
   useEffect(() => {
     let interval = null;
@@ -30,12 +31,16 @@ export function PomodoroTimer(props) {
   const handleActivation = () => {
     setIsActive(!isActive);
     setStatus((isActive) ? "Resume" : "Pause");
+    if (shouldShowTimer == true) {
+      setTimerDisplay(false);
+    }
   };
 
   const handleReset = () => {
     setIsActive(false);
     setStatus('Start');
     setTime(initialTime);
+    setTimerDisplay(true);
   };
 
   const handleChangeTime = (event) => {
@@ -58,7 +63,7 @@ export function PomodoroTimer(props) {
             {`${Math.floor(time / 60)}:${time % 60 < 10 ? `0${time % 60}` : time % 60}`}
           </div>
         </div>
-        <div className="time-input">
+        <div className={(shouldShowTimer) ? "time-input" : "hide time-input"}>
           <input
             className="time-input-min"
             type="number"
