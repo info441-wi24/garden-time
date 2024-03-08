@@ -43,6 +43,18 @@ export function PomodoroTimer(props) {
     setTimerDisplay(true);
   };
 
+  const changeBreakTimer = () => {
+    const breakTime = 5 * 60;
+    setTime(breakTime);
+    setInitialTime(breakTime);
+  }
+
+  const changePomodoroTimer = () => {
+    const pomodoroTime = 25 * 60;
+    setTime(pomodoroTime);
+    setInitialTime(pomodoroTime);
+  }
+
   const handleChangeTime = (event) => {
     const newTime = event.target.value * 60;
     setTime(newTime);
@@ -56,7 +68,8 @@ export function PomodoroTimer(props) {
       </div>
       <div className="container">
         <div className="above-timer">
-          <button className="pomodoro" onClick={handleReset}>Reset</button>
+          <button className="pomodoro" onClick={changePomodoroTimer}>Reset</button>
+          <button className="break-time" onClick={changeBreakTimer}>Break Time</button>
         </div>
         <div className="timer-container">
           <div className="timer-text">

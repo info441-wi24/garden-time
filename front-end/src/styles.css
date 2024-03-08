@@ -12,6 +12,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  padding-left: 13%;
 }
 
 .timer-container {
@@ -162,7 +163,8 @@ margin-left: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* This will make it take the full viewport height */
+  min-height: 100vh;
+  padding-left: 12%;
 }
 
 input {
@@ -183,7 +185,7 @@ button {
   top: 0;
   left: 0;
   height: 100vh;
-  width: 250px;
+  width: 13%;
   background-color: #C7DAC8;
   padding: 0.4rem 0.8rem;
   transition: all 0.5s ease;
@@ -240,8 +242,7 @@ button {
 }
 
 .sidebar ul li.logout {
-  position: absolute;
-  bottom: 20px;
+  margin-top:290%;
 }
 
 .sidebar ul li a {
@@ -249,7 +250,7 @@ button {
   display: flex;
   text-decoration: none;
   border-radius: 0.8rem;
-  align-items: center;
+  align-items: left;
 }
 
 .sidebar ul li a:hover {
@@ -269,7 +270,6 @@ button {
 .route-row {
   align-items: center;
   display: flex;
-  justify-content: center;
   width: 85%;  
 }
 
