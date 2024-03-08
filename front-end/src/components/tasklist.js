@@ -122,14 +122,27 @@ export function Tasklist(props) {
       };
 
       let editTaskTag = async (taskId) => {
-         // add the new tag to all of the user tags if needed 
-         await fetch('/api/v1/tasks/tag', {
+        // add the new tag to all of the user tags if needed 
+        console.log("EDITING TASK TAG");
+        await fetch('/api/v1/tasks/tag', {
           method: 'POST',
           headers : {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({tag: currentTaskTag, id: taskId}),
         });
+
+        // add the new tag to all of the user tags if needed 
+        await fetch('/api/v1/users/tag', {
+          method: 'POST',
+          headers : {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({tag: currentTag}),
+        });
+        console.log("after post to users/tag")
+        
+
       }
 
       let handleCustomTaskTag = (e) => {
@@ -206,7 +219,9 @@ export function Tasklist(props) {
                                 value={task.tag}
                                 onChange={(e) => {
                                   const selectedTag = e.target.value;
+                                  console.log(selectedTag);
                                   setCurrentTaskTag(selectedTag);
+                                  editTaskTag(task._id);
                                   if (selectedTag === 'custom') {
                                     setShowCustomTaskTagInput(true);
                                   } else {

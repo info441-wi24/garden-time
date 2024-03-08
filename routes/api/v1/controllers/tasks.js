@@ -92,6 +92,7 @@ router.post('/tag', async (req, res) => {
 
         // Assuming you want to update or add a tag within the userInfo
         userInfo.tag = req.body.tag;
+        console.log("userInfo", userInfo)
         
         // Make sure to call save on the correct object
         await userInfo.save();
