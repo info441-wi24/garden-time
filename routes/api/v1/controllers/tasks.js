@@ -90,11 +90,21 @@ router.post('/tag', async (req, res) => {
             return res.status(404).json({ "status": "error", "error": "User not found" });
         }
 
-        // Assuming you want to update or add a tag within the userInfo
-        userInfo.tag = req.body.tag;
-        console.log("userInfo", userInfo)
+        let taskInfo = await req.models.Task.findOne({_id: req.body.id});
+        console.log("TASK INFO" , taskInfo);
+        console.log("REQ BODY", req.body)
+        taskInfo.tag = req.body.tag;
+        console.log("TASK INFO" , taskInfo);
+
+        if (!userInfo.created_tags.includes(req.body.tag)) {
+            // Unshift adds to the front of the array instead of at the end so the new tags are always first.
+            userInfo.created_tags.unshift(req.body.tag);
+        }
+
+        
         
         // Make sure to call save on the correct object
+        await taskInfo.save();
         await userInfo.save();
 
         res.json({ "status": "success" });

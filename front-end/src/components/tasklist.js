@@ -73,6 +73,23 @@ export function Tasklist(props) {
     }
   };
 
+  const editTaskTag = async (taskId, taskTag) => {
+    try {
+      await fetch('api/v1/tasks/tag', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: taskId, tag: taskTag}),
+      });
+
+      await fetchTasks();
+      //window.location.reload();
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+
   return (
     <div>
       <header>
@@ -113,6 +130,14 @@ export function Tasklist(props) {
                           onClick={() => handleCheckboxClick(task.taskId)}
                         />
                         <label htmlFor={`task-${task.taskId}`}>{task.description}</label>
+                        <select
+                          value={task.tag}
+                          onChange={(e) => editTaskTag(task.taskId, e.target.value)}
+                        >
+                          {tagsList.map((tag, index) => (
+                            <option key={index} value={tag}>{tag}</option>
+                          ))}
+                        </select>
                       </li>
                     ))}
                   </ul>
