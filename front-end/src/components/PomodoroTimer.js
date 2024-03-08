@@ -88,7 +88,6 @@ export function PomodoroTimer(props) {
         <div className="above-timer">
           <button className="pomodoro" onClick={changePomodoroTimer}>Pomodoro</button>
           <button className="break-time" onClick={changeBreakTimer}>Break Time</button>
-          <button className="tag">Tag</button>
         </div>
         <div className="timer-container">
           <div className="timer-text">

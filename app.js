@@ -168,6 +168,7 @@ app.get(
 app.get('/postlogin', async (req, res) => {
     console.log("Reached the API router for users");
     req.session.authType = 'microsoft';
+    req.session.isAuthenticated = true;
     try {
         let existingUser = null;
 

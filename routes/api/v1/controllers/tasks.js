@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         let userInfo;
 
         if (req.session.authType === 'microsoft' && req.session.account.username) {
-            userInfo = await req.models.User.findOne({user: req.session.account.username});
+            userInfo = await req.models.User.findOne({username: req.session.account.username});
         } else if (req.session.authType === 'google' && req.session.passport && req.session.passport.user) {
             userInfo = await req.models.User.findOne({_id: req.session.passport.user});
         }
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
         let userInfo;
         if (req.session.authType === 'microsoft' && req.session.account.username) {
             // For Microsoft auth, assume you get the username via query parameters
-            userInfo = await req.models.User.findOne({ user: req.session.account.username });
+            userInfo = await req.models.User.findOne({ username: req.session.account.username });
         } else if (req.session.authType === 'google' && req.session.passport && req.session.passport.user) {
             // For Google auth, you get the user ID from the session
             userInfo = await req.models.User.findOne({ _id: req.session.passport.user });
@@ -80,7 +80,7 @@ router.post('/tag', async (req, res) => {
 
         if (req.session.authType === 'microsoft' && req.session.account.username) {
             // For Microsoft auth, assume you get the username via query parameters
-            userInfo = await req.models.User.findOne({ user: req.account.username });
+            userInfo = await req.models.User.findOne({ username: req.session.account.username });
         } else if (req.session.authType === 'google' && req.session.passport && req.session.passport.user) {
             // For Google auth, you get the user ID from the session
             userInfo = await req.models.User.findOne({ _id: req.session.passport.user });
@@ -106,7 +106,7 @@ router.post('/tag', async (req, res) => {
 
 
 router.delete('/', async (req, res) => {
-    if(req.isAuthenticated()){
+    if(req.session.isAuthenticated){
         try{
             console.log("DELETE REQUEST", req.body.id);
             let taskId = req.body.id;
