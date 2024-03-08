@@ -44,7 +44,7 @@ body {
   margin: 20px;
 }
 
-.start, .reset, .microsoft-auth, .guest, .pomodoro, .break-time, .tag, .google-auth, .canvas-auth, .connect-spotify, .delete, .deactivate, .feedback-btn {
+.start, .reset, .microsoft-auth, .guest, .pomodoro, .break-time, .tag, .google-auth, .canvas-auth, .connect-spotify, .delete, .deactivate, .feedback-btn, .add-task {
   outline: none;
   font-size: 14px;
   border-radius: 500px;
@@ -61,6 +61,25 @@ body {
   height: 54px;
   margin: 0px 10px;
   box-shadow: 0px 4px 4px #aaaaaa;
+}
+
+input.time-input-min {
+  border-radius: 16px;
+}
+
+.time-input {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2rem;
+  align-items: baseline;
+}
+
+input.time-input-min {
+  text-align: center;
+}
+
+.minutes {
+  margin-left: 1rem;
 }
 
 /* LOGIN */
@@ -91,7 +110,7 @@ body {
 }
 
 .auth-login {
- margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 * {
@@ -104,20 +123,25 @@ html {
 }
 
 body {
-height: 100%;
+  height: 100%;
 }
 
 .Homepage {
   height: 100%;
 }
 
+/* TASK PAGE */
+
 .card {
-background-color: rgba(255, 255, 255, 0.3);
-border-radius: 8px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-padding: 20px;
-max-width: 500px;
-min-height: 700px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 600px;
+  min-height: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .task-list {
@@ -141,18 +165,16 @@ margin-left: 5px;
   min-height: 100vh; /* This will make it take the full viewport height */
 }
 
-.card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 input {
   color: #000000;
 }
 
 button {
   color: #000000;
+}
+
+.tag-input {
+  justify-content: space-between;
 }
 
 /* NAVBAR */
@@ -291,6 +313,26 @@ img.tomato-logo {
 .custom-tag-popup input[type="text"]:focus {
   outline: none;
   border-color: #007bff; /* Example focus color, customize as needed */
+}
+
+.add-task {
+  width: 186px;
+  align-self: center;
+}
+
+.tag-input {
+  display: flex;
+  height: 4rem;
+}
+
+select.text-dark {
+  margin-left: 1rem;
+  height: 4rem;
+}
+
+.task-text {
+  margin-top: 2rem;
+  text-align: left;
 }
 
 /* SETTINGS PAGE */

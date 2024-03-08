@@ -151,35 +151,34 @@ export function Tasklist(props) {
           <NavBar />
         </header>
         <div className="taskbar-container">
-            <div className="card">
-                <h3>Task List:</h3>
-                <div className="card-body">
-                <div>
-                  <input
-                    type="text"
-                    value={newTask}
-                    onChange={(e) => setNewTask(e.target.value)}
-                    placeholder="Enter task..."
-                  />
-                   <select
-                      value={currentTag}
-                      onChange={(e) => {
-                        const selectedTag = e.target.value;
-                        setCurrentTag(selectedTag);
-                        if (selectedTag === 'custom') {
-                          setShowCustomTagInput(true);
-                        } else {
-                          setCustomTag('');
-                        }
-                      }}
-                      className='text-dark'
-                    >
-                    {tagsList.map((tag, tagIndex) => (
-                        <option key={tagIndex} value={tag}>
-                            {tag}
-                        </option>
-                    ))}
-                    <option value={"custom"}>Input custom tag..</option>
+          <div className="card">
+            <h3>Task List</h3>
+              <div className="card-body">
+              <div className="tag-input">
+                <input
+                  type="text"
+                  value={newTask}
+                  onChange={(e) => setNewTask(e.target.value)}
+                  placeholder="Enter task..."
+                />
+                <select
+                  value={currentTag}
+                  onChange={(e) => {
+                    const selectedTag = e.target.value;
+                    setCurrentTag(selectedTag);
+                    if (selectedTag === 'custom') {
+                      setShowCustomTagInput(true);
+                    } else {
+                      setCustomTag('');
+                    }
+                  }
+                }>
+                {tagsList.map((tag, tagIndex) => (
+                  <option key={tagIndex} value={tag}>
+                      {tag}
+                  </option>
+                ))}
+                  <option value={"custom"}>Input custom tag..</option>
                   </select>
                   {showCustomTagInput && (
                     <div className="custom-tag-popup">
@@ -191,57 +190,56 @@ export function Tasklist(props) {
                       />
                     </div>
                   )}
-                  <br/>
-                  <button onClick={handleAddTask}>Add Task</button>
+                  <button className="add-task" onClick={handleAddTask}>Add Task</button>
                 </div>
-                {isLoading ? (
-                    <p>Loading...</p>
-                ) : (
-                    tasks.length !== 0 ? (
-                      <ul className="task-list">
-                      {tasks.map((task, index) => (
-                          <li key={index}>
-                            <input type="checkbox" id={`task-${index}`} onClick={() => {handleCheckboxClick(task.taskId)}}/>
-                            <label htmlFor={`task-${index}`}>{task.description}</label>
-                            <select
-                              value={task.tag}
-                              onChange={(e) => {
-                                const selectedTag = e.target.value;
-                                setCurrentTaskTag(selectedTag);
-                                if (selectedTag === 'custom') {
-                                  setShowCustomTaskTagInput(true);
-                                } else {
-                                  setCustomTaskTag('');
-                                }
-                              }}
-                              className='text-dark'
-                            >
-                              {tagsList.map((tag, tagIndex) => (
-                                  <option key={tagIndex} value={tag}>
-                                      {tag}
-                                  </option>
-                              ))}
-                              <option value={"custom"}>Input custom tag..</option>
-                            </select>
-                            {showCustomTaskTagInput && (
-                              <div className="custom-tag-popup">
-                                <input
-                                  type="text"
-                                  value={customTaskTag}
-                                  onChange={handleCustomTaskTag}
-                                  onBlur={handleCustomTaskTagBlur}
-                                  placeholder="Type your own tag"
-                                />
-                              </div>
-                            )}
-                          </li>
-                      ))}
-                      </ul>
+                <div className="task-text">
+                  {isLoading ? (
+                      <p>Loading...</p>
+                  ) : (
+                      tasks.length !== 0 ? (
+                        <ul className="task-list">
+                        {tasks.map((task, index) => (
+                            <li key={index}>
+                              <input type="checkbox" id={`task-${index}`} onClick={() => {handleCheckboxClick(task.taskId)}}/>
+                              <label htmlFor={`task-${index}`}>{task.description}</label>
+                              <select
+                                value={task.tag}
+                                onChange={(e) => {
+                                  const selectedTag = e.target.value;
+                                  setCurrentTaskTag(selectedTag);
+                                  if (selectedTag === 'custom') {
+                                    setShowCustomTaskTagInput(true);
+                                  } else {
+                                    setCustomTaskTag('');
+                                  }
+                                }}
+                                className='text-dark'
+                              >
+                                {tagsList.map((tag, tagIndex) => (
+                                    <option key={tagIndex} value={tag}>
+                                        {tag}
+                                    </option>
+                                ))}
+                                <option value={"custom"}>Input custom tag..</option>
+                              </select>
+                              {showCustomTaskTagInput && (
+                                <div className="custom-tag-popup">
+                                  <input
+                                    type="text"
+                                    value={customTaskTag}
+                                    onChange={handleCustomTaskTag}
+                                    onBlur={handleCustomTaskTagBlur}
+                                    placeholder="Type your own tag"
+                                  />
+                                </div>
+                              )}
+                            </li>
+                        ))}
+                        </ul>
                     ) :
-
                     <p>You do not have any tasks!</p>
-                    
-                )}
+                  )}
+                </div>
                 </div>
             </div>
         </div>
