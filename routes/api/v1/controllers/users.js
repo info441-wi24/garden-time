@@ -78,38 +78,40 @@ router.get('/tag', async (req, res) => {
 });
 
 
-router.post('/tag', async (req, res) =>{
+router.post('/tag', async (req, res) => {
     console.log("reached the api router for user tags");
-    try{
-        
-        if(req.session.account.username !== undefined) {
-            
-            let usernameVar = req.session.account.username
-            let userValues= await req.models.User.findOne({username: usernameVar})
-            
-            console.log("USER VALUES", userValues);
-        
-            if(!userValues.created_tags.includes(req.body.tag)){
-                //unshift adds to the front of the array instead of at the end so the new tags are always first 
-                userValues.created_tags.unshift(req.body.tag)
-            }
-            console.log(userValues.created_tags)
+    try {
+        let userValues;
 
-            await userValues.save()
-            res.json({"status":"success"})
+        if (req.session.authType === 'microsoft' && req.session.account && req.session.account.username) {
+            let usernameVar = req.session.account.username;
+            userValues = await req.models.User.findOne({username: usernameVar});
+        } else if (req.session.authType === 'google' && req.session.passport && req.session.passport.user) {
+            let userId = req.session.passport.user;
+            userValues = await req.models.User.findOne({_id: userId});
         }
-        else {
-            console.log("Error getting tags from db", error)
-            res.send(500).json({"status": "error", "error": error})
-        }
-        
-        
 
-    }catch(error){
-        console.log("Error getting tags from db", error)
-        res.send(500).json({"status": "error", "error": error})
+        if (!userValues) {
+            // If no user is found, respond with an error.
+            return res.status(404).json({"status": "error", "error": "User not found"});
+        }
+
+        console.log("USER VALUES", userValues);
+        if (!userValues.created_tags.includes(req.body.tag)) {
+            // Unshift adds to the front of the array instead of at the end so the new tags are always first.
+            userValues.created_tags.unshift(req.body.tag);
+        }
+        console.log(userValues.created_tags);
+
+        await userValues.save();
+        res.json({"status": "success"});
+
+    } catch (error) {
+        console.log("Error processing tags", error);
+        res.status(500).json({"status": "error", "error": error});
     }
-})
+});
+
 
 
 export default router;
