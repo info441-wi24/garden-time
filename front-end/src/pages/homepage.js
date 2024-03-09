@@ -32,12 +32,26 @@ export function Home(props) {
 }
 
 function Login() {
+    
+    const handleSpotifyLogin = async () => {
+        try {
+            console.log("trying to navigate to signin");
+            // navigate('/signin');
+            window.location.href = '/auth/login';
+            // window.location.reload();
+            
+            console.log("finished signin");
+            
+        } catch (error) {
+            console.error('Error logging in:', error);
+        }
+    };
+
     return (
         <div>
             <header className="App-header">
-                <a className="spotify-login btn-spotify" href="http://localhost:3000/auth/login" >
-                    Login with Spotify 
-                </a>
+                <button className="spotify-login btn-spotify" onClick={async () => {
+                        await handleSpotifyLogin()}}>Login To Spotify</button>
             </header>
         </div>
     );
