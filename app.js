@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import sessions from 'express-session'
 import cors from 'cors';
+import axios from 'axios';
 
 import models from './models.js';
 import dotenv from 'dotenv';
@@ -88,8 +89,8 @@ passport.deserializeUser(async function(id, done) {
   
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID, // '882952153446-4lqtn2n3j6r04db9gl2eqfctfppp1ltq.apps.googleusercontent.com',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET, //'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',
     callbackURL: "/auth/google/callback",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
@@ -126,6 +127,72 @@ app.get("/auth/google/callback",
     res.redirect("/#/home");
   }
 );
+
+
+//spotify 
+const spotify_client_id = process.env.SPOTIFY_CLIENT_ID;  // '00d34b776b0244419e1f2885bd10c02c'; 
+const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET; // '3306c6e35d8345119cf0fc426b59ac7f' 
+const spotify_redirect_uri = 'http://localhost:3000/auth/spotify/callback';
+
+var generateRandomString = function (length) {
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  
+    for (var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  };
+
+app.get('/auth/login', (req, res) => {
+
+    var scope = "streaming user-read-email user-read-private user-modify-playback-state"
+    var state = generateRandomString(16);
+  
+    var auth_query_parameters = new URLSearchParams({
+      response_type: "code",
+      client_id: spotify_client_id,
+      scope: scope,
+      redirect_uri: spotify_redirect_uri,
+      state: state
+    })
+  
+    res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
+  });
+
+  app.get('/auth/spotify/callback', async (req, res) => {
+    const code = req.query.code;
+    const authString = Buffer.from(`${spotify_client_id}:${spotify_client_secret}`).toString('base64');
+  
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'https://accounts.spotify.com/api/token',
+        data: new URLSearchParams({
+          code: code,
+          redirect_uri: spotify_redirect_uri,
+          grant_type: 'authorization_code',
+        }),
+        headers: {
+          'Authorization': `Basic ${authString}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+  
+
+      const access_token = response.data.access_token;
+      req.session.access_token = access_token;
+      res.redirect('/#/home');
+    } catch (error) {
+      console.error('Error exchanging code for token:', error.response ? error.response.data : error.message);
+      res.status(500).send('Authentication error');
+    }
+  });
+
+app.get('/auth/token', (req, res) => {
+    console.log(req.session.access_token)
+    res.json({ access_token: req.session.access_token });
+});
 
 
 
