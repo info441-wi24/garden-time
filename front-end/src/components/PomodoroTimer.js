@@ -31,7 +31,7 @@ export function PomodoroTimer(props) {
   const handleActivation = () => {
     setIsActive(!isActive);
     setStatus((isActive) ? "Resume" : "Pause");
-    if (shouldShowTimer == true) {
+    if (shouldShowTimer === true) {
       setTimerDisplay(false);
     }
   };

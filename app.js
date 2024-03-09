@@ -190,7 +190,6 @@ app.get('/auth/login', (req, res) => {
   });
 
 app.get('/auth/token', (req, res) => {
-    console.log(req.session.access_token)
     res.json({ access_token: req.session.access_token });
 });
 

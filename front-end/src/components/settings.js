@@ -13,6 +13,20 @@ export function Settings(props) {
       setValue(newValue);
     };
 
+    const handleSpotifyLogin = async () => {
+        try {
+            console.log("trying to navigate to signin");
+            // navigate('/signin');
+            window.location.href = '/auth/login';
+            // window.location.reload();
+            
+            console.log("finished signin");
+            
+        } catch (error) {
+            console.error('Error logging in:', error);
+        }
+    };
+
     return (
         <div>
             <NavBar />
@@ -35,7 +49,8 @@ export function Settings(props) {
 
               <div className="music">
                 <h2 className="settings-subheader">Music</h2>
-                <button className="connect-spotify">Connect to Spotify</button>
+                <button className="connect-spotify" onClick={async () => {
+                        await handleSpotifyLogin()}}>Connect to Spotify</button>
               </div>
 
               <div className="account">

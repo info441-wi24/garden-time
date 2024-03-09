@@ -21,11 +21,13 @@ function WebPlayback(props) {
 
     useEffect(() => {
 
-        const script = document.createElement("script");
-        script.src = "https://sdk.scdn.co/spotify-player.js";
-        script.async = true;
-
-        document.body.appendChild(script);
+        if (!document.getElementById("spotify-player-script")) {
+            const script = document.createElement("script");
+            script.id = "spotify-player-script";
+            script.src = "https://sdk.scdn.co/spotify-player.js";
+            script.async = true;
+            document.body.appendChild(script);
+        }
 
         window.onSpotifyWebPlaybackSDKReady = () => {
 
@@ -62,8 +64,17 @@ function WebPlayback(props) {
 
             player.connect();
 
+            return () => {
+                if (player) {
+                    player.removeListener('ready');
+                    player.removeListener('not_ready');
+                    player.removeListener('player_state_changed');
+                    player.disconnect();
+                }
+            };
+
         };
-    }, []);
+    }, [props.token]);
 
     if (!is_active) { 
         return (
