@@ -13,45 +13,12 @@ export function Settings(props) {
       setValue(newValue);
     };
 
-    const handleSpotifyLogin = async () => {
-        try {
-            console.log("trying to navigate to signin");
-            // navigate('/signin');
-            window.location.href = '/auth/login';
-            // window.location.reload();
-            
-            console.log("finished signin");
-            
-        } catch (error) {
-            console.error('Error logging in:', error);
-        }
-    };
-
     return (
         <div>
             <NavBar />
           <div className="settings-body">
             <div className="settings-content">
               <h1 className="settings-header">Settings</h1>
-          
-              <div className="alert-vol">
-                <h2 className="settings-subheader">Alert Volume</h2>
-                <div className="volume-slider">
-                  <Box sx={{ width: 370 }}>
-                    <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-                      <VolumeDown />
-                      <Slider aria-label="Volume" value={value} onChange={handleChange} />
-                      <VolumeUp />
-                    </Stack>
-                  </Box>
-                </div>
-              </div>
-
-              <div className="music">
-                <h2 className="settings-subheader">Music</h2>
-                <button className="connect-spotify" onClick={async () => {
-                        await handleSpotifyLogin()}}>Connect to Spotify</button>
-              </div>
 
               <div className="account">
                 <h2 className="settings-subheader">Account</h2>
