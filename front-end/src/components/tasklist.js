@@ -6,7 +6,10 @@ export function Tasklist(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [newTask, setNewTask] = useState('');
   const [tagsList, setTagsList] = useState([]);
+
   const [currentTag, setCurrentTag] = useState('Not Started');
+  const [customTag, setCustomTag] = useState('');
+  const [showCustomTagInput, setShowCustomTagInput] = useState(false);
 
   useEffect(() => {
     const fetchTagsAndTasks = async () => {
@@ -50,6 +53,19 @@ export function Tasklist(props) {
         body: JSON.stringify({ task: newTask, tag: currentTag }),
       });
 
+
+       console.log(currentTag);
+       // add the new tag to all of the user tags if needed 
+       await fetch('/api/v1/users/tag', {
+        method: 'POST',
+        headers : {
+          'Content-Type': 'application/json'
+        },
+        
+        body: JSON.stringify({tag: currentTag}),
+      });
+      console.log("after post to users/tag")
+
       setNewTask('');
       await fetchTasks();
     } catch (error) {
@@ -73,6 +89,19 @@ export function Tasklist(props) {
     }
   };
 
+  let handleCustomTag = (e) => {
+    console.log("setting custom tag input");
+    setCustomTag(e.target.value);
+    setShowCustomTagInput(true);
+  };
+
+  
+  let handleCustomBlur = (e) => {
+    setCurrentTag(customTag);
+    console.log(currentTag);
+    setShowCustomTagInput(false);
+  };
+
   const editTaskTag = async (taskId, taskTag) => {
     try {
       await fetch('api/v1/tasks/tag', {
@@ -82,6 +111,17 @@ export function Tasklist(props) {
         },
         body: JSON.stringify({ id: taskId, tag: taskTag}),
       });
+
+      // add the new tag to all of the user tags if needed 
+      await fetch('/api/v1/users/tag', {
+        method: 'POST',
+        headers : {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({tag: currentTag}),
+      });
+      console.log("after post to users/tag")
+      
 
       await fetchTasks();
       //window.location.reload();
@@ -108,12 +148,31 @@ export function Tasklist(props) {
               />
               <select
                 value={currentTag}
-                onChange={(e) => setCurrentTag(e.target.value)}
+                onChange={(e) => {
+                  const selectedTag = e.target.value;
+                  setCurrentTag(selectedTag);
+                  if (selectedTag === 'custom') {
+                    setShowCustomTagInput(true);
+                  } else {
+                    setCustomTag('');
+                  }
+                }}
               >
                 {tagsList.map((tag, index) => (
                   <option key={index} value={tag}>{tag}</option>
                 ))}
-              </select>
+                  <option value={"custom"}>Input custom tag..</option>
+                </select>
+                {showCustomTagInput && (
+                    <div className="custom-tag-popup">
+                      <input
+                        type="text"
+                        onChange={handleCustomTag}
+                        onBlur={handleCustomBlur}
+                        placeholder="Type your own tag"
+                      />
+                    </div>
+                  )}
               <button className="add-task" onClick={handleAddTask}>Add Task</button>
             </div>
             <div className="task-text">
