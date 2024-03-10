@@ -19,18 +19,18 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import findOrCreate from "mongoose-findorcreate";
 
 const authConfig = {
-    // auth: {
-    //     clientId: "694c3e20-5c5c-4aba-82ea-70df9da00fb0",
-    //     authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
-    //     clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
-    //     redirectUri: "/redirect"
-    // },
     auth: {
-        clientId: `${process.env.MICROSOFT_CLIENT_ID}`,
-        authority: `https://login.microsoftonline.com/${process.env.MICROSOFT_TENANT_ID}`,
-        clientSecret: `${process.env.MICROSOFT_CLIENT_SECRET}`,
-        redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
-    },    
+        clientId: "694c3e20-5c5c-4aba-82ea-70df9da00fb0",
+        authority: "https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2",
+        clientSecret: "Do18Q~3jVv6ffePZCAn_bFva.VOpl~fhvR-D4dup",
+        redirectUri: "/redirect"
+    },
+    // auth: {
+    //     clientId: `${process.env.MICROSOFT_CLIENT_ID}`,
+    //     authority: `https://login.microsoftonline.com/${process.env.MICROSOFT_TENANT_ID}`,
+    //     clientSecret: `${process.env.MICROSOFT_CLIENT_SECRET}`,
+    //     redirectUri: "/redirect",  //note: you can explicitly make this "localhost:3000/redirect" or "examplesite.me/redirect"
+    // },    
     system: {
         loggerOptions: {
             loggerCallback(loglevel, message, containsPii) {
@@ -89,8 +89,8 @@ passport.deserializeUser(async function(id, done) {
   
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID, // '882952153446-4lqtn2n3j6r04db9gl2eqfctfppp1ltq.apps.googleusercontent.com',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET, //'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',
+    clientID: '882952153446-4lqtn2n3j6r04db9gl2eqfctfppp1ltq.apps.googleusercontent.com', //process.env.GOOGLE_CLIENT_ID, // 
+    clientSecret: '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', //process.env.GOOGLE_CLIENT_SECRET, //
     callbackURL: "/auth/google/callback",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
@@ -130,8 +130,8 @@ app.get("/auth/google/callback",
 
 
 //spotify 
-const spotify_client_id = process.env.SPOTIFY_CLIENT_ID;  // '00d34b776b0244419e1f2885bd10c02c'; 
-const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET; // '3306c6e35d8345119cf0fc426b59ac7f' 
+const spotify_client_id =  '00d34b776b0244419e1f2885bd10c02c'; //process.env.SPOTIFY_CLIENT_ID;  //
+const spotify_client_secret = '3306c6e35d8345119cf0fc426b59ac7f' //process.env.SPOTIFY_CLIENT_SECRET; // 
 const spotify_redirect_uri = 'http://localhost:3000/auth/spotify/callback';
 
 var generateRandomString = function (length) {
