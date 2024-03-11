@@ -132,66 +132,67 @@ app.get("/auth/google/callback",
 //spotify 
 const spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
-const spotify_redirect_uri = 'https://garden-time-info441.azurewebsites.net/auth/spotify/callback';
+// const spotify_redirect_uri = 'https://garden-time-info441.azurewebsites.net/auth/spotify/callback';
 // const spotify_redirect_uri = 'http://localhost:3000/auth/spotify/callback';
 
 var generateRandomString = function (length) {
-    var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  
-    for (var i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-  };
+  var text = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (var i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
 
 app.get('/auth/login', (req, res) => {
 
-    var scope = "streaming user-read-email user-read-private user-modify-playback-state"
-    var state = generateRandomString(16);
-  
-    var auth_query_parameters = new URLSearchParams({
-      response_type: "code",
-      client_id: spotify_client_id,
-      scope: scope,
-      redirect_uri: spotify_redirect_uri,
-      state: state
-    })
-  
-    res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
-  });
+  var scope = "streaming user-read-email user-read-private user-modify-playback-state"
+  var state = generateRandomString(16);
 
-  app.get('/auth/spotify/callback', async (req, res) => {
-    const code = req.query.code;
-    const authString = Buffer.from(`${spotify_client_id}:${spotify_client_secret}`).toString('base64');
-  
-    try {
-      const response = await axios({
-        method: 'post',
-        url: 'https://accounts.spotify.com/api/token',
-        data: new URLSearchParams({
-          code: code,
-          redirect_uri: spotify_redirect_uri,
-          grant_type: 'authorization_code',
-        }),
-        headers: {
-          'Authorization': `Basic ${authString}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-  
+  var auth_query_parameters = new URLSearchParams({
+    response_type: "code",
+    client_id: spotify_client_id,
+    scope: scope,
+    redirect_uri: spotify_redirect_uri,
+    state: state
+  })
 
-      const access_token = response.data.access_token;
-      req.session.access_token = access_token;
-      res.redirect('/#/home');
-    } catch (error) {
-      console.error('Error exchanging code for token:', error.response ? error.response.data : error.message);
-      res.status(500).send('Authentication error');
-    }
-  });
+  res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
+});
+
+app.get('/auth/spotify/callback', async (req, res) => {
+  const code = req.query.code;
+  const authString = Buffer.from(`${spotify_client_id}:${spotify_client_secret}`).toString('base64');
+
+  try {
+    const response = await axios({
+      method: 'post',
+      url: 'https://accounts.spotify.com/api/token',
+      data: new URLSearchParams({
+        code: code,
+        redirect_uri: spotify_redirect_uri,
+        grant_type: 'authorization_code',
+      }),
+      headers: {
+        'Authorization': `Basic ${authString}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+
+    const access_token = response.data.access_token;
+    req.session.access_token = access_token;
+    res.redirect('/#/home');
+  } catch (error) {
+    console.error('Error exchanging code for token:', error.response ? error.response.data : error.message);
+    res.status(500).send('Authentication error');
+  }
+});
 
 app.get('/auth/token', (req, res) => {
-    res.json({ access_token: req.session.access_token });
+  console.log(req.session.access_token)
+  res.json({ access_token: req.session.access_token });
 });
 
 
